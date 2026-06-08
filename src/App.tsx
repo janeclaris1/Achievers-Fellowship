@@ -23,6 +23,7 @@ import Reports from './pages/admin/Reports';
 import SoulWinners from './pages/admin/SoulWinners';
 import Partnerships from './pages/admin/Partnerships';
 import EventsPrograms from './pages/admin/EventsPrograms';
+import EnvSetupScreen from './components/shared/EnvSetupScreen';
 import BulkMessagingView from './components/shared/BulkMessagingView';
 import ReflectionsView from './components/shared/ReflectionsView';
 import SCLDashboard from './pages/scl/Dashboard';
@@ -91,8 +92,11 @@ const AppRoutes: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-slate-400">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -223,13 +227,15 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <ThemeProvider>
-            <AppRoutes />
-          </ThemeProvider>
-        </AuthProvider>
-      </BrowserRouter>
+      <EnvSetupScreen>
+        <BrowserRouter>
+          <AuthProvider>
+            <ThemeProvider>
+              <AppRoutes />
+            </ThemeProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </EnvSetupScreen>
     </QueryClientProvider>
   );
 };
