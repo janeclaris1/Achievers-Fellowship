@@ -11,6 +11,7 @@ import {
 import StatCard from '../../components/shared/StatCard';
 import MeritRankBadge from '../../components/shared/MeritRankBadge';
 import PortalWelcomeHeader from '../../components/shared/PortalWelcomeHeader';
+import WelfarePartnershipBanner from '../../components/shared/WelfarePartnershipBanner';
 import EventsProgramsCard from '../../components/shared/EventsProgramsCard';
 import ReflectionsCard from '../../components/shared/ReflectionsCard';
 import { supabase } from '../../lib/supabase';
@@ -131,6 +132,8 @@ const AdminDashboard: React.FC = () => {
       <PortalWelcomeHeader
         subtitle={`System overview — ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`}
       />
+
+      <WelfarePartnershipBanner />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

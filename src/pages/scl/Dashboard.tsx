@@ -3,6 +3,7 @@ import { Users, UserCheck, Calendar, Activity } from 'lucide-react';
 import StatCard from '../../components/shared/StatCard';
 import BirthdayCountdown from '../../components/shared/BirthdayCountdown';
 import PortalWelcomeHeader from '../../components/shared/PortalWelcomeHeader';
+import WelfarePartnershipBanner from '../../components/shared/WelfarePartnershipBanner';
 import EventsProgramsCard from '../../components/shared/EventsProgramsCard';
 import ReflectionsCard from '../../components/shared/ReflectionsCard';
 import { supabase } from '../../lib/supabase';
@@ -56,6 +57,8 @@ const SCLDashboard: React.FC = () => {
   return (
     <div className="space-y-6 fade-in">
       <PortalWelcomeHeader subtitle="Your senior cell overview" />
+
+      <WelfarePartnershipBanner />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard label="Total Members" value={members.length} icon={<Users size={20} />} color="blue" />

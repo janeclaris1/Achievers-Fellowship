@@ -12,3 +12,11 @@ export const formatEspees = (amount: number): string =>
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   }).format(amount)} ESPEES`;
+
+export const formatGhs = (amount: number): string =>
+  new Intl.NumberFormat('en-GH', {
+    style: 'currency',
+    currency: 'GHS',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(amount);

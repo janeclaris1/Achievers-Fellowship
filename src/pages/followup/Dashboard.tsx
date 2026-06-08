@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CheckCircle, AlertCircle, Clock } from 'lucide-react';
 import StatCard from '../../components/shared/StatCard';
 import PortalWelcomeHeader from '../../components/shared/PortalWelcomeHeader';
+import WelfarePartnershipBanner from '../../components/shared/WelfarePartnershipBanner';
 import EventsProgramsCard from '../../components/shared/EventsProgramsCard';
 import ReflectionsCard from '../../components/shared/ReflectionsCard';
 import { supabase } from '../../lib/supabase';
@@ -41,6 +42,8 @@ const FollowUpDashboard: React.FC = () => {
   return (
     <div className="space-y-6 fade-in">
       <PortalWelcomeHeader subtitle="Track and manage member follow-up activities" />
+
+      <WelfarePartnershipBanner />
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard label="Pending Follow-ups" value={loading ? '—' : pending.length} icon={<Clock size={20} />} color="amber" />

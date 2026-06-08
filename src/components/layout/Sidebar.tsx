@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, UserCheck, Heart, Phone, Bell,
   Settings, FileText, Building2, ClipboardList, Calendar,
   BookOpen, MessageSquare, PhoneCall, BarChart3, ArrowRightLeft,
-  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound
+  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../utils/cn';
@@ -22,6 +22,7 @@ const adminNav: NavItem[] = [
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/admin/events' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/admin/reflections' },
   { label: 'Top Partners', icon: <HandCoins size={18} />, to: '/admin/partnerships' },
+  { label: 'Welfare Sponsors', icon: <HandHeart size={18} />, to: '/admin/welfare-partnerships' },
   { label: 'User Management', icon: <UserCog size={18} />, to: '/admin/users' },
   { label: 'Password Requests', icon: <KeyRound size={18} />, to: '/admin/password-requests' },
   { label: 'Senior Cells', icon: <Building2 size={18} />, to: '/admin/cell-groups' },
@@ -53,6 +54,7 @@ const welfareNav: NavItem[] = [
   { label: 'Programs', icon: <Activity size={18} />, to: '/welfare/programs' },
   { label: 'Calendar', icon: <Calendar size={18} />, to: '/welfare/calendar' },
   { label: 'Prayer Requests', icon: <BookOpen size={18} />, to: '/welfare/prayer-requests' },
+  { label: 'Welfare Sponsors', icon: <HandHeart size={18} />, to: '/welfare/welfare-partnerships' },
   { label: 'Bulk Messaging', icon: <MessageSquare size={18} />, to: '/welfare/bulk-sms' },
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/welfare/reports' },
 ];

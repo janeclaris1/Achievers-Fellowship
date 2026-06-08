@@ -290,3 +290,19 @@ export interface PasswordResetRequest {
   cell_groups?: CellGroup;
   resolver?: Profile;
 }
+
+export type WelfarePartnershipStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
+
+export interface WelfarePartnership {
+  id: string;
+  profile_id: string;
+  amount: number;
+  currency: string;
+  status: WelfarePartnershipStatus;
+  payment_reference: string;
+  paystack_reference?: string;
+  partner_note?: string;
+  paid_at?: string;
+  created_at: string;
+  profiles?: Profile;
+}

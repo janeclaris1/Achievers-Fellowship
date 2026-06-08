@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Phone, Clock, PhoneCall } from 'lucide-react';
 import StatCard from '../../components/shared/StatCard';
 import PortalWelcomeHeader from '../../components/shared/PortalWelcomeHeader';
+import WelfarePartnershipBanner from '../../components/shared/WelfarePartnershipBanner';
 import EventsProgramsCard from '../../components/shared/EventsProgramsCard';
 import ReflectionsCard from '../../components/shared/ReflectionsCard';
 import { supabase } from '../../lib/supabase';
@@ -33,6 +34,8 @@ const CallCenterDashboard: React.FC = () => {
   return (
     <div className="space-y-6 fade-in">
       <PortalWelcomeHeader subtitle="Member outreach and communication hub" />
+
+      <WelfarePartnershipBanner />
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard label="Calls Today" value={loading ? '—' : callsToday} icon={<Phone size={20} />} color="blue" />

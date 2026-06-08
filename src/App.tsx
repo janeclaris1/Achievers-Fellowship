@@ -46,6 +46,8 @@ import Visitations from './pages/followup/Visitations';
 import CallCenterDashboard from './pages/callcenter/Dashboard';
 import MakeCall from './pages/callcenter/MakeCall';
 import CallHistory from './pages/callcenter/CallHistory';
+import PartnershipComplete from './pages/partnership/PartnershipComplete';
+import WelfarePartnerships from './pages/welfare/WelfarePartnerships';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -96,6 +98,7 @@ const AppRoutes: React.FC = () => {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/partnership/complete" element={<PartnershipComplete />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
@@ -106,6 +109,7 @@ const AppRoutes: React.FC = () => {
       {/* Public */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/partnership/complete" element={<PartnershipComplete />} />
 
       {/* Root redirect */}
       <Route
@@ -140,9 +144,8 @@ const AppRoutes: React.FC = () => {
         <Route path="events" element={<EventsPrograms />} />
         <Route path="bulk-messaging" element={<BulkMessagingView />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
       </Route>
-
-      {/* SCL Portal */}
       <Route
         path="/scl"
         element={
@@ -179,6 +182,7 @@ const AppRoutes: React.FC = () => {
         <Route path="calendar" element={<Visitations />} />
         <Route path="bulk-sms" element={<BulkMessagingView />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Welfare Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>
 
