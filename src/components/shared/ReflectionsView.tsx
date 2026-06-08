@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BookOpen, Plus, Loader2, ArrowLeft, Send, Save, CheckCircle,
-  XCircle, Clock, FileText, Camera,
+  XCircle, Clock, FileText, Camera, Trash2,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
@@ -269,6 +269,26 @@ const ReflectionsView: React.FC = () => {
     setSaving(false);
   };
 
+  const removeReflection = async (reflection: Reflection) => {
+    const label = reflection.status === 'PUBLISHED' ? 'published reflection' : 'reflection';
+    const confirmed = window.confirm(
+      `Remove this ${label}?\n\n"${reflection.title}"\n\nThis cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setSaving(true);
+    const { error } = await supabase.from('reflections').delete().eq('id', reflection.id);
+
+    if (error) {
+      alert(error.message);
+    } else {
+      await fetchReflections();
+      if (selected?.id === reflection.id) backToList();
+      setTab('published');
+    }
+    setSaving(false);
+  };
+
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
@@ -362,11 +382,27 @@ const ReflectionsView: React.FC = () => {
                   <span className={cn('badge text-[10px]', statusColors[reflection.status])}>
                     {statusLabels[reflection.status]}
                   </span>
-                  {isPending && canApprove && (
-                    <span className="text-[10px] text-amber-600 flex items-center gap-1">
-                      <Clock size={12} /> Review
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {isPending && canApprove && (
+                      <span className="text-[10px] text-amber-600 flex items-center gap-1">
+                        <Clock size={12} /> Review
+                      </span>
+                    )}
+                    {canApprove && (
+                      <button
+                        type="button"
+                        title="Remove reflection"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeReflection(reflection);
+                        }}
+                        disabled={saving}
+                        className="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <h2 className="font-heading font-semibold text-slate-900 dark:text-slate-100 line-clamp-2">
                   {reflection.title}
@@ -461,6 +497,18 @@ const ReflectionsView: React.FC = () => {
             {selected.author_id === user?.id && ['DRAFT', 'REJECTED'].includes(selected.status) && (
               <button type="button" onClick={() => openEdit(selected)} className="btn-secondary">
                 Edit reflection
+              </button>
+            )}
+
+            {canApprove && (
+              <button
+                type="button"
+                onClick={() => removeReflection(selected)}
+                disabled={saving}
+                className="btn-secondary flex items-center gap-2 text-rose-600 border-rose-200 hover:bg-rose-50 dark:border-rose-800 dark:hover:bg-rose-900/20"
+              >
+                {saving ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                Remove reflection
               </button>
             )}
           </div>
