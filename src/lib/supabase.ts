@@ -4,12 +4,12 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 export function isSupabaseConfigured(): boolean {
-  return Boolean(
-    supabaseUrl &&
+  const hasUrl = Boolean(supabaseUrl && supabaseUrl.includes('supabase.co'));
+  const hasKey = Boolean(
     supabaseAnonKey &&
-    supabaseUrl.includes('supabase.co') &&
-    supabaseAnonKey.startsWith('eyJ')
+    (supabaseAnonKey.startsWith('eyJ') || supabaseAnonKey.startsWith('sb_publishable_'))
   );
+  return hasUrl && hasKey;
 }
 
 export const supabase = createClient(
