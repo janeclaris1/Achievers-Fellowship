@@ -9,6 +9,7 @@ export function canViewWelfarePartnershipAmounts(role: UserRole | null | undefin
 
 export async function initiateWelfarePartnership(params: {
   amount: number;
+  partnership_arm?: string;
   partner_note?: string;
 }): Promise<{ authorization_url?: string; payment_reference?: string; error?: string }> {
   const { data: { session } } = await supabase.auth.getSession();

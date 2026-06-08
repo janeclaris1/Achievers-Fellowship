@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { amount, partner_note } = await req.json();
+    const { amount, partner_note, partnership_arm } = await req.json();
     const parsedAmount = Number(amount);
 
     if (!parsedAmount || parsedAmount < 1) {
@@ -61,6 +61,7 @@ Deno.serve(async (req) => {
       status: 'PENDING',
       payment_reference: paymentReference,
       partner_note: partner_note?.trim() || null,
+      partnership_arm: partnership_arm?.trim() || null,
     });
 
     if (insertError) {
@@ -88,6 +89,7 @@ Deno.serve(async (req) => {
         metadata: {
           profile_id: user.id,
           type: 'welfare_partnership',
+          partnership_arm: partnership_arm?.trim() || null,
         },
       }),
     });

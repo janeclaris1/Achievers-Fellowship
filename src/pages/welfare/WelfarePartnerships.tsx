@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HandHeart, Loader2 } from 'lucide-react';
 import { fetchAllWelfarePartnerships } from '../../lib/welfarePartnership';
+import { getPartnershipArmName } from '../../lib/welfarePartnershipArms';
 import type { WelfarePartnership } from '../../types';
 import { formatDateTime } from '../../utils/dateUtils';
 import { formatGhs } from '../../utils/formatUtils';
@@ -65,6 +66,7 @@ const WelfarePartnerships: React.FC = () => {
                 <tr className="text-left text-xs text-slate-500 border-b border-slate-100 dark:border-slate-700">
                   <th className="px-5 py-3 font-medium">Date</th>
                   <th className="px-5 py-3 font-medium">Partner</th>
+                  <th className="px-5 py-3 font-medium">Partnership</th>
                   <th className="px-5 py-3 font-medium">Amount</th>
                   <th className="px-5 py-3 font-medium">Status</th>
                   <th className="px-5 py-3 font-medium">Note</th>
@@ -78,6 +80,9 @@ const WelfarePartnerships: React.FC = () => {
                     </td>
                     <td className="px-5 py-3 font-medium text-slate-800 dark:text-slate-100">
                       {p.profiles?.full_name || '—'}
+                    </td>
+                    <td className="px-5 py-3 text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                      {getPartnershipArmName(p.partnership_arm) || '—'}
                     </td>
                     <td className="px-5 py-3 text-emerald-700 dark:text-emerald-400 font-medium">
                       {formatGhs(Number(p.amount))}

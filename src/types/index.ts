@@ -302,6 +302,7 @@ export interface WelfarePartnership {
   payment_reference: string;
   paystack_reference?: string;
   partner_note?: string;
+  partnership_arm?: string;
   paid_at?: string;
   created_at: string;
   profiles?: Profile;
