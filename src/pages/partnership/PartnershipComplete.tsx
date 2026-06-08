@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, Loader2, XCircle } from 'lucide-react';
-import { verifyWelfarePartnership } from '../../lib/welfarePartnership';
+import {
+  canViewWelfarePartnershipAmounts,
+  verifyWelfarePartnership,
+} from '../../lib/welfarePartnership';
 import { formatGhs } from '../../utils/formatUtils';
 import { useAuth } from '../../context/AuthContext';
 import type { UserRole } from '../../types';
@@ -42,6 +45,7 @@ const PartnershipComplete: React.FC = () => {
   }, [reference]);
 
   const dashboardPath = profile?.role ? roleDefaultRoutes[profile.role] : '/login';
+  const showAmounts = canViewWelfarePartnershipAmounts(profile?.role);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-6">
@@ -56,7 +60,7 @@ const PartnershipComplete: React.FC = () => {
           <>
             <CheckCircle2 className="mx-auto text-emerald-500 mb-4" size={48} />
             <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Thank you for partnering!</h1>
-            {amount !== null && (
+            {showAmounts && amount !== null && (
               <p className="text-2xl font-bold text-emerald-600 mt-2">{formatGhs(amount)}</p>
             )}
             <p className="text-sm text-slate-500 mt-2">{message}</p>

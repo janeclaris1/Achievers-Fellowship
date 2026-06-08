@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { HandHeart, Loader2, Sparkles } from 'lucide-react';
-import { initiateWelfarePartnership } from '../../lib/welfarePartnership';
+import {
+  canViewWelfarePartnershipAmounts,
+  initiateWelfarePartnership,
+} from '../../lib/welfarePartnership';
+import { useAuth } from '../../context/AuthContext';
 import { formatGhs } from '../../utils/formatUtils';
 import Modal from './Modal';
 import { cn } from '../../utils/cn';
@@ -8,6 +12,8 @@ import { cn } from '../../utils/cn';
 const PRESET_AMOUNTS = [20, 50, 100, 200, 500];
 
 const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className }) => {
+  const { role } = useAuth();
+  const showAmounts = canViewWelfarePartnershipAmounts(role);
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState('');
   const [selectedPreset, setSelectedPreset] = useState<number | null>(null);
@@ -78,7 +84,7 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
                 Partner with Welfare Department
               </h2>
               <p className="text-sm text-emerald-50/90 mt-1 max-w-lg">
-                Be a sponsor today — support pastoral care, programs, and member welfare.
+                Be a Partner today — support fellowship programs, and member welfare.
               </p>
             </div>
           </div>
@@ -95,32 +101,38 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
       <Modal open={open} onClose={() => !loading && setOpen(false)} title="Partner with Welfare Department">
         <form onSubmit={handlePay} className="space-y-4">
           <p className="text-sm text-slate-500">
-            Choose your partnership amount. You will be redirected to Paystack to complete payment securely.
+            {showAmounts
+              ? 'Choose your partnership amount. You will be redirected to Paystack to complete payment securely.'
+              : 'Enter your partnership contribution. You will be redirected to Paystack to complete payment securely.'}
           </p>
 
-          <div>
-            <label className="label">Quick amounts (GHS)</label>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-              {PRESET_AMOUNTS.map((preset) => (
-                <button
-                  key={preset}
-                  type="button"
-                  onClick={() => selectPreset(preset)}
-                  className={cn(
-                    'py-2 rounded-lg text-sm font-medium border transition-colors',
-                    selectedPreset === preset
-                      ? 'bg-emerald-600 text-white border-emerald-600'
-                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
-                  )}
-                >
-                  {formatGhs(preset)}
-                </button>
-              ))}
+          {showAmounts && (
+            <div>
+              <label className="label">Quick amounts (GHS)</label>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {PRESET_AMOUNTS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => selectPreset(preset)}
+                    className={cn(
+                      'py-2 rounded-lg text-sm font-medium border transition-colors',
+                      selectedPreset === preset
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
+                    )}
+                  >
+                    {formatGhs(preset)}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           <div>
-            <label className="label">Or enter custom amount (GHS)</label>
+            <label className="label">
+              {showAmounts ? 'Or enter custom amount (GHS)' : 'Partnership contribution (GHS)'}
+            </label>
             <input
               type="number"
               min="1"
@@ -145,7 +157,7 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
             />
           </div>
 
-          {parsedAmount >= 1 && (
+          {showAmounts && parsedAmount >= 1 && (
             <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
               You are partnering with {formatGhs(parsedAmount)}
             </p>

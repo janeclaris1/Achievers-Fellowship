@@ -1,6 +1,11 @@
 import { supabase } from './supabase';
+import type { UserRole } from '../types';
 
 const functionsUrl = import.meta.env.VITE_SUPABASE_URL;
+
+export function canViewWelfarePartnershipAmounts(role: UserRole | null | undefined): boolean {
+  return role === 'MASTER_ADMIN' || role === 'WELFARE';
+}
 
 export async function initiateWelfarePartnership(params: {
   amount: number;
