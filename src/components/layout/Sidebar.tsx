@@ -7,6 +7,7 @@ import {
   Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useUnreadReflectionCount } from '../../hooks/useUnreadReflectionCount';
 import { cn } from '../../utils/cn';
 import { CHURCH_NAME } from '../../lib/branding';
 
@@ -14,13 +15,14 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   to: string;
+  showUnreadBadge?: boolean;
 }
 
 const adminNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/admin/dashboard' },
   { label: 'Top Soul Winners', icon: <Trophy size={18} />, to: '/admin/soul-winners' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/admin/events' },
-  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/admin/reflections' },
+  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/admin/reflections', showUnreadBadge: true },
   { label: 'Top Partners', icon: <HandCoins size={18} />, to: '/admin/partnerships' },
   { label: 'Welfare Sponsors', icon: <HandHeart size={18} />, to: '/admin/welfare-partnerships' },
   { label: 'User Management', icon: <UserCog size={18} />, to: '/admin/users' },
@@ -37,7 +39,7 @@ const adminNav: NavItem[] = [
 const sclNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/scl/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/scl/events' },
-  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/scl/reflections' },
+  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/scl/reflections', showUnreadBadge: true },
   { label: 'My Members', icon: <Users size={18} />, to: '/scl/members' },
   { label: 'Attendance', icon: <UserCheck size={18} />, to: '/scl/attendance' },
   { label: 'Birthday Calendar', icon: <Calendar size={18} />, to: '/scl/birthdays' },
@@ -48,7 +50,7 @@ const sclNav: NavItem[] = [
 const welfareNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/welfare/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/welfare/events' },
-  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/welfare/reflections' },
+  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/welfare/reflections', showUnreadBadge: true },
   { label: 'Member Database', icon: <Users size={18} />, to: '/welfare/members' },
   { label: 'Birthdays', icon: <Heart size={18} />, to: '/welfare/birthdays' },
   { label: 'Programs', icon: <Activity size={18} />, to: '/welfare/programs' },
@@ -62,7 +64,7 @@ const welfareNav: NavItem[] = [
 const followupNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/followup/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/followup/events' },
-  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/followup/reflections' },
+  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/followup/reflections', showUnreadBadge: true },
   { label: 'Follow-up List', icon: <ClipboardList size={18} />, to: '/followup/list' },
   { label: 'Visitations', icon: <Calendar size={18} />, to: '/followup/visitations' },
   { label: 'Reports', icon: <FileText size={18} />, to: '/followup/reports' },
@@ -71,7 +73,7 @@ const followupNav: NavItem[] = [
 const callCenterNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/callcenter/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/callcenter/events' },
-  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/callcenter/reflections' },
+  { label: 'Reflections', icon: <BookOpen size={18} />, to: '/callcenter/reflections', showUnreadBadge: true },
   { label: 'Make a Call', icon: <PhoneCall size={18} />, to: '/callcenter/call' },
   { label: 'Send SMS', icon: <MessageSquare size={18} />, to: '/callcenter/sms' },
   { label: 'Call History', icon: <Phone size={18} />, to: '/callcenter/history' },
@@ -102,6 +104,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
   const { profile } = useAuth();
+  const unreadReflections = useUnreadReflectionCount();
   const navItems = profile?.role ? navByRole[profile.role] || [] : [];
   const sectionTitle = profile?.role ? roleSectionTitle[profile.role] : 'Portal';
 
@@ -136,8 +139,15 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
               onClick={onClose}
               className={({ isActive }) => cn('sidebar-link', isActive && 'active')}
             >
-              {item.icon}
-              <span>{item.label}</span>
+              <span className="relative flex-shrink-0">
+                {item.icon}
+                {item.showUnreadBadge && unreadReflections > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
+                    {unreadReflections > 99 ? '99+' : unreadReflections}
+                  </span>
+                )}
+              </span>
+              <span className="flex-1">{item.label}</span>
             </NavLink>
           ))}
         </nav>

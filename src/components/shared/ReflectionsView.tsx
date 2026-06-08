@@ -12,6 +12,7 @@ import AuthorAvatar from './AuthorAvatar';
 import BibleReader from './BibleReader';
 import MessagePlayer from './MessagePlayer';
 import { uploadProfileAvatar, saveProfileAvatar } from '../../lib/profileAvatars';
+import { markAllPublishedReflectionsRead, markReflectionRead } from '../../lib/reflectionReads';
 
 const REFLECTION_SELECT =
   '*, profiles!reflections_author_id_fkey(id, full_name, avatar_url, role), reviewer:profiles!reflections_reviewed_by_fkey(full_name)';
@@ -89,6 +90,11 @@ const ReflectionsView: React.FC = () => {
     fetchReflections();
   }, []);
 
+  useEffect(() => {
+    if (!user?.id) return;
+    markAllPublishedReflectionsRead(user.id);
+  }, [user?.id]);
+
   const published = useMemo(
     () => reflections.filter((r) => r.status === 'PUBLISHED'),
     [reflections]
@@ -113,6 +119,9 @@ const ReflectionsView: React.FC = () => {
   const openArticle = (reflection: Reflection) => {
     setSelected(reflection);
     setView('article');
+    if (reflection.status === 'PUBLISHED' && user?.id) {
+      markReflectionRead(user.id, reflection.id);
+    }
   };
 
   const openCreate = () => {
