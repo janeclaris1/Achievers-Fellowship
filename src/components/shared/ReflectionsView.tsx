@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   BookOpen, Plus, Loader2, ArrowLeft, Send, Save, CheckCircle,
-  XCircle, Clock, FileText, Camera, Trash2,
+  XCircle, Clock, FileText,   Camera, Trash2, ImagePlus,
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
@@ -12,7 +12,11 @@ import AuthorAvatar from './AuthorAvatar';
 import BibleReader from './BibleReader';
 import MessagePlayer from './MessagePlayer';
 import { uploadProfileAvatar, saveProfileAvatar } from '../../lib/profileAvatars';
+import { uploadReflectionPostImage } from '../../lib/reflectionImages';
 import { markAllPublishedReflectionsRead, markReflectionRead } from '../../lib/reflectionReads';
+import ReflectionEngagement from './ReflectionEngagement';
+
+const reflectionPostImageClass = 'w-full h-auto block';
 
 const REFLECTION_SELECT =
   '*, profiles!reflections_author_id_fkey(id, full_name, avatar_url, role), reviewer:profiles!reflections_reviewed_by_fkey(full_name)';
@@ -44,6 +48,7 @@ interface ReflectionForm {
   scripture_passage: string;
   message_title: string;
   message_url: string;
+  post_image_url: string;
 }
 
 const emptyForm = (): ReflectionForm => ({
@@ -54,11 +59,13 @@ const emptyForm = (): ReflectionForm => ({
   scripture_passage: '',
   message_title: '',
   message_url: '',
+  post_image_url: '',
 });
 
 const ReflectionsView: React.FC = () => {
   const { user, profile, refreshProfile } = useAuth();
   const fileRef = useRef<HTMLInputElement>(null);
+  const postImageRef = useRef<HTMLInputElement>(null);
 
   const canCreate = profile?.role ? CREATOR_ROLES.includes(profile.role) : false;
   const canApprove = profile?.role === 'MASTER_ADMIN';
@@ -74,6 +81,7 @@ const ReflectionsView: React.FC = () => {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [reviewNote, setReviewNote] = useState('');
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [postImageUploading, setPostImageUploading] = useState(false);
 
   const fetchReflections = async () => {
     setLoading(true);
@@ -141,6 +149,7 @@ const ReflectionsView: React.FC = () => {
       scripture_passage: reflection.scripture_passage || '',
       message_title: reflection.message_title || '',
       message_url: reflection.message_url || '',
+      post_image_url: reflection.post_image_url || '',
     });
     setSaveError(null);
     setView('editor');
@@ -167,6 +176,7 @@ const ReflectionsView: React.FC = () => {
     scripture_passage: form.scripture_passage.trim() || null,
     message_title: form.message_title.trim() || null,
     message_url: form.message_url.trim() || null,
+    post_image_url: form.post_image_url.trim() || null,
     author_id: user?.id,
   });
 
@@ -313,6 +323,20 @@ const ReflectionsView: React.FC = () => {
     if (fileRef.current) fileRef.current.value = '';
   };
 
+  const handlePostImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setPostImageUploading(true);
+    try {
+      const url = await uploadReflectionPostImage(user.id, editId, file);
+      setForm((f) => ({ ...f, post_image_url: url }));
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Upload failed');
+    }
+    setPostImageUploading(false);
+    if (postImageRef.current) postImageRef.current.value = '';
+  };
+
   const renderList = () => (
     <div className="space-y-6 fade-in">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -380,13 +404,21 @@ const ReflectionsView: React.FC = () => {
             return (
               <article
                 key={reflection.id}
-                className="card p-5 flex flex-col gap-3 hover:shadow-md transition-shadow cursor-pointer"
+                className="card overflow-hidden flex flex-col gap-3 hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => {
                   if (tab === 'pending' && canApprove) openReview(reflection);
                   else if (reflection.status === 'PUBLISHED' || reflection.author_id === user?.id) openArticle(reflection);
                   else if (['DRAFT', 'REJECTED'].includes(reflection.status) && reflection.author_id === user?.id) openEdit(reflection);
                 }}
               >
+                {reflection.post_image_url && (
+                  <img
+                    src={reflection.post_image_url}
+                    alt=""
+                    className={reflectionPostImageClass}
+                  />
+                )}
+                <div className={cn('p-5 flex flex-col gap-3 flex-1', reflection.post_image_url && 'pt-4')}>
                 <div className="flex items-start justify-between gap-2">
                   <span className={cn('badge text-[10px]', statusColors[reflection.status])}>
                     {statusLabels[reflection.status]}
@@ -430,6 +462,7 @@ const ReflectionsView: React.FC = () => {
                     </p>
                   </div>
                 </div>
+                </div>
               </article>
             );
           })}
@@ -449,6 +482,13 @@ const ReflectionsView: React.FC = () => {
         </button>
 
         <article className="card overflow-hidden">
+          {selected.post_image_url && (
+            <img
+              src={selected.post_image_url}
+              alt=""
+              className={reflectionPostImageClass}
+            />
+          )}
           <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-slate-700">
             <span className={cn('badge text-[10px] mb-3', statusColors[selected.status])}>
               {statusLabels[selected.status]}
@@ -520,6 +560,10 @@ const ReflectionsView: React.FC = () => {
                 Remove reflection
               </button>
             )}
+
+            {selected.status === 'PUBLISHED' && (
+              <ReflectionEngagement reflectionId={selected.id} canModerate={canApprove} />
+            )}
           </div>
         </article>
       </div>
@@ -586,6 +630,61 @@ const ReflectionsView: React.FC = () => {
 
         <div className="space-y-4">
           <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Your reflection</h3>
+
+          <div>
+            <label className="label">Post image</label>
+            <input
+              ref={postImageRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handlePostImageUpload}
+            />
+            {form.post_image_url ? (
+              <div className="space-y-3">
+                <img
+                  src={form.post_image_url}
+                  alt="Reflection cover preview"
+                  className={cn(reflectionPostImageClass, 'rounded-lg border border-slate-200 dark:border-slate-700')}
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => postImageRef.current?.click()}
+                    disabled={postImageUploading}
+                    className="btn-secondary text-xs flex items-center gap-1.5"
+                  >
+                    {postImageUploading ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
+                    Change image
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, post_image_url: '' }))}
+                    disabled={postImageUploading}
+                    className="btn-secondary text-xs flex items-center gap-1.5 text-rose-600"
+                  >
+                    <Trash2 size={14} /> Remove
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => postImageRef.current?.click()}
+                disabled={postImageUploading}
+                className="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg p-8 flex flex-col items-center gap-2 text-slate-500 hover:border-blue-400 hover:text-blue-600 transition-colors"
+              >
+                {postImageUploading ? (
+                  <Loader2 size={24} className="animate-spin" />
+                ) : (
+                  <ImagePlus size={24} />
+                )}
+                <span className="text-sm font-medium">Add post image</span>
+                <span className="text-xs text-slate-400">Shown on the reflection card and article (max 5MB)</span>
+              </button>
+            )}
+          </div>
+
           <div>
             <label className="label">Title *</label>
             <input

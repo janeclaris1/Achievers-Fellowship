@@ -1,15 +1,18 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserCheck, Heart, Phone, Bell,
   Settings, FileText, Building2, ClipboardList, Calendar,
   BookOpen, MessageSquare, PhoneCall, BarChart3, ArrowRightLeft,
-  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart
+  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart,
+  ChevronDown,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUnreadReflectionCount } from '../../hooks/useUnreadReflectionCount';
+import { DEPARTMENTS, departmentsRouteByRole } from '../../lib/departments';
 import { cn } from '../../utils/cn';
 import { CHURCH_NAME } from '../../lib/branding';
+import type { UserRole } from '../../types';
 
 interface NavItem {
   label: string;
@@ -74,9 +77,8 @@ const callCenterNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/callcenter/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/callcenter/events' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/callcenter/reflections', showUnreadBadge: true },
-  { label: 'Make a Call', icon: <PhoneCall size={18} />, to: '/callcenter/call' },
-  { label: 'Send SMS', icon: <MessageSquare size={18} />, to: '/callcenter/sms' },
-  { label: 'Call History', icon: <Phone size={18} />, to: '/callcenter/history' },
+  { label: 'Member Outreach', icon: <PhoneCall size={18} />, to: '/callcenter/outreach' },
+  { label: 'Activity Log', icon: <Phone size={18} />, to: '/callcenter/history' },
   { label: 'Bulk SMS', icon: <Inbox size={18} />, to: '/callcenter/bulk-sms' },
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/callcenter/reports' },
 ];
@@ -104,13 +106,48 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
   const { profile } = useAuth();
+  const location = useLocation();
   const unreadReflections = useUnreadReflectionCount();
   const navItems = profile?.role ? navByRole[profile.role] || [] : [];
   const sectionTitle = profile?.role ? roleSectionTitle[profile.role] : 'Portal';
+  const departmentsBase = profile?.role
+    ? departmentsRouteByRole[profile.role as UserRole]
+    : '/admin/departments';
+
+  const onDepartmentsRoute = location.pathname.includes('/departments');
+  const [departmentsOpen, setDepartmentsOpen] = useState(onDepartmentsRoute);
+
+  useEffect(() => {
+    if (onDepartmentsRoute) setDepartmentsOpen(true);
+  }, [onDepartmentsRoute]);
+
+  const renderNavLink = (item: NavItem, nested = false) => (
+    <NavLink
+      key={item.to}
+      to={item.to}
+      onClick={onClose}
+      end={!nested}
+      className={({ isActive }) =>
+        cn(
+          nested ? 'sidebar-link-nested' : 'sidebar-link',
+          isActive && 'active'
+        )
+      }
+    >
+      <span className="relative flex-shrink-0">
+        {item.icon}
+        {item.showUnreadBadge && unreadReflections > 0 && (
+          <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
+            {unreadReflections > 99 ? '99+' : unreadReflections}
+          </span>
+        )}
+      </span>
+      <span className="flex-1">{item.label}</span>
+    </NavLink>
+  );
 
   return (
     <>
-      {/* Mobile overlay */}
       {open && (
         <div
           className="fixed inset-0 bg-black/40 z-40 lg:hidden"
@@ -132,24 +169,69 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
         </div>
 
         <nav className="flex-1 px-2 py-1 space-y-0.5">
-          {navItems.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={onClose}
-              className={({ isActive }) => cn('sidebar-link', isActive && 'active')}
-            >
-              <span className="relative flex-shrink-0">
-                {item.icon}
-                {item.showUnreadBadge && unreadReflections > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
-                    {unreadReflections > 99 ? '99+' : unreadReflections}
-                  </span>
+          {navItems.map((item, index) => {
+            const showDepartmentsAfterDashboard = index === 0 && profile?.role;
+
+            return (
+              <React.Fragment key={item.to}>
+                {renderNavLink(item)}
+
+                {showDepartmentsAfterDashboard && (
+                  <div className="pt-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setDepartmentsOpen((v) => !v)}
+                      className={cn(
+                        'sidebar-link w-full',
+                        onDepartmentsRoute && 'active'
+                      )}
+                    >
+                      <Building2 size={18} className="flex-shrink-0" />
+                      <span className="flex-1 text-left">Departments</span>
+                      <ChevronDown
+                        size={16}
+                        className={cn(
+                          'text-slate-400 transition-transform flex-shrink-0',
+                          departmentsOpen && 'rotate-180'
+                        )}
+                      />
+                    </button>
+
+                    {departmentsOpen && (
+                      <div className="ml-3 pl-2 border-l border-slate-200 dark:border-slate-700 space-y-0.5 mb-1">
+                        <NavLink
+                          to={departmentsBase}
+                          onClick={onClose}
+                          end
+                          className={({ isActive }) =>
+                            cn('sidebar-link-nested', isActive && 'active')
+                          }
+                        >
+                          <span className="text-xs">Overview</span>
+                        </NavLink>
+                        {DEPARTMENTS.map((dept) => {
+                          const Icon = dept.icon;
+                          return (
+                            <NavLink
+                              key={dept.id}
+                              to={`${departmentsBase}/${dept.id}`}
+                              onClick={onClose}
+                              className={({ isActive }) =>
+                                cn('sidebar-link-nested', isActive && 'active')
+                              }
+                            >
+                              <Icon size={14} className="flex-shrink-0 opacity-70" />
+                              <span className="text-xs leading-snug">{dept.name}</span>
+                            </NavLink>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 )}
-              </span>
-              <span className="flex-1">{item.label}</span>
-            </NavLink>
-          ))}
+              </React.Fragment>
+            );
+          })}
         </nav>
 
         <div className="px-4 py-4 border-t border-slate-100 dark:border-slate-700">

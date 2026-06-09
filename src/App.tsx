@@ -26,6 +26,7 @@ import EventsPrograms from './pages/admin/EventsPrograms';
 import EnvSetupScreen from './components/shared/EnvSetupScreen';
 import BulkMessagingView from './components/shared/BulkMessagingView';
 import ReflectionsView from './components/shared/ReflectionsView';
+import DepartmentsView from './components/shared/DepartmentsView';
 import SCLDashboard from './pages/scl/Dashboard';
 import MyMembers from './pages/scl/MyMembers';
 import Attendance from './pages/scl/Attendance';
@@ -44,7 +45,7 @@ import Visitations from './pages/followup/Visitations';
 
 // Call Center pages
 import CallCenterDashboard from './pages/callcenter/Dashboard';
-import MakeCall from './pages/callcenter/MakeCall';
+import MemberOutreach from './pages/callcenter/MemberOutreach';
 import CallHistory from './pages/callcenter/CallHistory';
 import PartnershipComplete from './pages/partnership/PartnershipComplete';
 import WelfarePartnerships from './pages/welfare/WelfarePartnerships';
@@ -144,6 +145,8 @@ const AppRoutes: React.FC = () => {
         <Route path="events" element={<EventsPrograms />} />
         <Route path="bulk-messaging" element={<BulkMessagingView />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="departments" element={<DepartmentsView />} />
+        <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
       </Route>
       <Route
@@ -161,6 +164,8 @@ const AppRoutes: React.FC = () => {
         <Route path="followups" element={<FollowUpList />} />
         <Route path="events" element={<EventsPrograms />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="departments" element={<DepartmentsView />} />
+        <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="notifications" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Notifications</h1><p className="text-slate-500 mt-2">Check your notification bell above.</p></div>} />
       </Route>
 
@@ -182,6 +187,8 @@ const AppRoutes: React.FC = () => {
         <Route path="calendar" element={<Visitations />} />
         <Route path="bulk-sms" element={<BulkMessagingView />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="departments" element={<DepartmentsView />} />
+        <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Welfare Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>
@@ -200,6 +207,8 @@ const AppRoutes: React.FC = () => {
         <Route path="visitations" element={<Visitations />} />
         <Route path="events" element={<EventsPrograms />} />
         <Route path="reflections" element={<ReflectionsView />} />
+        <Route path="departments" element={<DepartmentsView />} />
+        <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Follow-up Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>
 
@@ -213,11 +222,14 @@ const AppRoutes: React.FC = () => {
         }
       >
         <Route path="dashboard" element={<CallCenterDashboard />} />
-        <Route path="call" element={<MakeCall />} />
+        <Route path="outreach" element={<MemberOutreach />} />
+        <Route path="call" element={<MemberOutreach />} />
+        <Route path="sms" element={<MemberOutreach />} />
         <Route path="history" element={<CallHistory />} />
         <Route path="events" element={<EventsPrograms />} />
         <Route path="reflections" element={<ReflectionsView />} />
-        <Route path="sms" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Send SMS</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
+        <Route path="departments" element={<DepartmentsView />} />
+        <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="bulk-sms" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Bulk SMS</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Call Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>

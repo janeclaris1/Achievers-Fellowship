@@ -3,6 +3,7 @@ export type Gender = 'MALE' | 'FEMALE';
 export type MemberStatus = 'ACTIVE' | 'INACTIVE' | 'NEW_CONVERT' | 'TRANSFERRED' | 'DECEASED';
 export type FollowUpType = 'CALL' | 'MESSAGE' | 'VISIT';
 export type FollowUpStatus = 'PENDING' | 'COMPLETED' | 'NO_ANSWER' | 'RESCHEDULED';
+export type OutreachChannel = 'PHONE' | 'SMS' | 'WHATSAPP';
 export type VisitStatus = 'SCHEDULED' | 'COMPLETED' | 'MISSED' | 'CANCELLED';
 export type ProgramType = 'BIRTHDAY' | 'BEREAVEMENT' | 'HOSPITAL_VISIT' | 'WEDDING' | 'SPECIAL_PROGRAM' | 'OTHER';
 export type ProgramStatus = 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
@@ -67,6 +68,9 @@ export interface FollowUp {
   status: FollowUpStatus;
   notes?: string;
   ai_report?: string;
+  channel?: OutreachChannel;
+  message_body?: string;
+  twilio_sid?: string;
   duration_sec?: number;
   scheduled_at?: string;
   completed_at?: string;
@@ -258,6 +262,7 @@ export interface Reflection {
   scripture_passage?: string;
   message_title?: string;
   message_url?: string;
+  post_image_url?: string;
   author_id: string;
   status: ReflectionStatus;
   submitted_at?: string;
@@ -269,6 +274,31 @@ export interface Reflection {
   updated_at: string;
   profiles?: Profile;
   reviewer?: Profile;
+}
+
+export interface ReflectionComment {
+  id: string;
+  reflection_id: string;
+  profile_id: string;
+  body: string;
+  author_name?: string;
+  created_at: string;
+  updated_at?: string;
+  profiles?: Pick<Profile, 'id' | 'full_name' | 'avatar_url'>;
+}
+
+export interface ReflectionReaction {
+  reflection_id: string;
+  profile_id: string;
+  emoji: string;
+  created_at: string;
+}
+
+export interface ReflectionCommentReaction {
+  comment_id: string;
+  profile_id: string;
+  emoji: string;
+  created_at: string;
 }
 
 export type PasswordResetPosition = 'SENIOR_CELL_LEADER' | 'CELL_LEADER';

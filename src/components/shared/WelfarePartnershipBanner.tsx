@@ -89,13 +89,32 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
       <div
         className={cn(
           'relative overflow-hidden rounded-xl border border-emerald-200 dark:border-emerald-800',
-          'bg-gradient-to-r text-white p-5 sm:p-6 transition-[background] duration-700',
-          currentArm.gradient,
+          'text-white p-5 sm:p-6 transition-all duration-700',
+          !currentArm.backgroundImage && 'bg-gradient-to-r',
+          !currentArm.backgroundImage && currentArm.gradient,
           className
         )}
       >
-        <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10" />
-        <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
+        {currentArm.backgroundImage ? (
+          <>
+            <img
+              src={currentArm.backgroundImage}
+              alt=""
+              className={cn('absolute inset-0 w-full h-full object-cover', currentArm.imageClass)}
+            />
+            <div
+              className={cn(
+                'absolute inset-0',
+                currentArm.overlayClass ?? 'bg-gradient-to-r from-slate-900/85 via-slate-900/65 to-slate-900/75'
+              )}
+            />
+          </>
+        ) : (
+          <>
+            <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-white/10" />
+            <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
+          </>
+        )}
 
         <div className="relative flex flex-col gap-4">
           <div className="flex items-center justify-between gap-3">
