@@ -12,7 +12,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const ALLOWED_ROLES = ['MASTER_ADMIN', 'WELFARE'];
+const ALLOWED_ROLES = ['MASTER_ADMIN', 'WELFARE', 'CALL_CENTER'];
 const SEND_DELAY_MS = 150;
 
 type BulkChannel = 'SMS' | 'WHATSAPP' | 'BOTH';

@@ -9,7 +9,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUnreadReflectionCount } from '../../hooks/useUnreadReflectionCount';
-import { DEPARTMENTS, departmentsRouteByRole } from '../../lib/departments';
+import { DEPARTMENTS } from '../../lib/departments';
+import {
+  canAccessPortal,
+  getDepartmentsBasePath,
+  getPortalFromPath,
+  getPortalSectionTitle,
+} from '../../lib/portalNav';
 import { cn } from '../../utils/cn';
 import { CHURCH_NAME } from '../../lib/branding';
 import type { UserRole } from '../../types';
@@ -33,6 +39,7 @@ const adminNav: NavItem[] = [
   { label: 'Senior Cells', icon: <Building2 size={18} />, to: '/admin/cell-groups' },
   { label: 'All Members', icon: <Users size={18} />, to: '/admin/members' },
   { label: 'Bulk Messaging', icon: <MessageSquare size={18} />, to: '/admin/bulk-messaging' },
+  { label: 'Call Center', icon: <PhoneCall size={18} />, to: '/callcenter/dashboard' },
   { label: 'Transfers', icon: <ArrowRightLeft size={18} />, to: '/admin/transfers' },
   { label: 'Audit Logs', icon: <Shield size={18} />, to: '/admin/audit-logs' },
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/admin/reports' },
@@ -83,6 +90,14 @@ const callCenterNav: NavItem[] = [
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/callcenter/reports' },
 ];
 
+const navByPortal: Record<string, NavItem[]> = {
+  admin: adminNav,
+  scl: sclNav,
+  welfare: welfareNav,
+  followup: followupNav,
+  callcenter: callCenterNav,
+};
+
 const navByRole: Record<string, NavItem[]> = {
   MASTER_ADMIN: adminNav,
   SCL: sclNav,
@@ -91,13 +106,13 @@ const navByRole: Record<string, NavItem[]> = {
   CALL_CENTER: callCenterNav,
 };
 
-const roleSectionTitle: Record<string, string> = {
-  MASTER_ADMIN: 'Admin Portal',
-  SCL: 'SCL Portal',
-  WELFARE: 'Welfare Portal',
-  FOLLOWUP: 'Follow-up Portal',
-  CALL_CENTER: 'Call Center',
-};
+function resolveNavItems(role: UserRole, pathname: string): NavItem[] {
+  const portal = getPortalFromPath(pathname);
+  if (portal && canAccessPortal(role, portal)) {
+    return navByPortal[portal] || [];
+  }
+  return navByRole[role] || [];
+}
 
 interface SidebarProps {
   open?: boolean;
@@ -108,10 +123,11 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
   const { profile } = useAuth();
   const location = useLocation();
   const unreadReflections = useUnreadReflectionCount();
-  const navItems = profile?.role ? navByRole[profile.role] || [] : [];
-  const sectionTitle = profile?.role ? roleSectionTitle[profile.role] : 'Portal';
-  const departmentsBase = profile?.role
-    ? departmentsRouteByRole[profile.role as UserRole]
+  const role = profile?.role as UserRole | undefined;
+  const navItems = role ? resolveNavItems(role, location.pathname) : [];
+  const sectionTitle = role ? getPortalSectionTitle(location.pathname, role) : 'Portal';
+  const departmentsBase = role
+    ? getDepartmentsBasePath(location.pathname, role)
     : '/admin/departments';
 
   const onDepartmentsRoute = location.pathname.includes('/departments');

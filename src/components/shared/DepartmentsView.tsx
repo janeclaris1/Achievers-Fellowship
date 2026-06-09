@@ -1,20 +1,24 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Building2, ChevronRight } from 'lucide-react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { ArrowLeft, Building2, ChevronRight, History, Inbox, PhoneCall } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import {
-  DEPARTMENTS,
-  departmentsRouteByRole,
-  getDepartment,
-} from '../../lib/departments';
+import { DEPARTMENTS, getDepartment } from '../../lib/departments';
+import { canUseCallCenterTools, getDepartmentsBasePath } from '../../lib/portalNav';
 import { cn } from '../../utils/cn';
 import type { UserRole } from '../../types';
 
+const callCenterTools = [
+  { label: 'Member Outreach', to: '/callcenter/outreach', icon: PhoneCall },
+  { label: 'Activity Log', to: '/callcenter/history', icon: History },
+  { label: 'Bulk Messaging', to: '/callcenter/bulk-sms', icon: Inbox },
+];
+
 const DepartmentsView: React.FC = () => {
   const { departmentId } = useParams<{ departmentId?: string }>();
+  const location = useLocation();
   const { profile } = useAuth();
   const role = profile?.role as UserRole | undefined;
-  const basePath = role ? departmentsRouteByRole[role] : '/admin/departments';
+  const basePath = role ? getDepartmentsBasePath(location.pathname, role) : '/admin/departments';
 
   const department = departmentId ? getDepartment(departmentId) : undefined;
 
@@ -33,6 +37,8 @@ const DepartmentsView: React.FC = () => {
 
   if (department) {
     const Icon = department.icon;
+    const showCallCenterTools = department.id === 'call-center' && canUseCallCenterTools(role);
+
     return (
       <div className="max-w-3xl mx-auto space-y-6 fade-in">
         <Link to={basePath} className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
@@ -74,18 +80,33 @@ const DepartmentsView: React.FC = () => {
                 <div>
                   <p className="text-xs uppercase tracking-wider text-white/70">Department</p>
                   <h1 className="text-2xl font-heading font-bold">{department.name}</h1>
-                  <p className="text-sm text-white/90 mt-1">{department.tagline}</p>
                 </div>
               </div>
             )}
           </div>
 
-          <div className="p-6 sm:p-8 space-y-4">
-            {department.backgroundImage && (
-              <p className="text-base text-slate-600 dark:text-slate-300 font-medium">{department.tagline}</p>
-            )}
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{department.description}</p>
-          </div>
+          {showCallCenterTools && (
+            <div className="p-6 sm:p-8 space-y-3">
+              <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Call Center tools</h2>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {callCenterTools.map((tool) => {
+                  const ToolIcon = tool.icon;
+                  return (
+                    <Link
+                      key={tool.to}
+                      to={tool.to}
+                      className="rounded-[8px] border border-slate-200 dark:border-slate-600 p-4 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors group"
+                    >
+                      <ToolIcon size={20} className="text-blue-600 dark:text-blue-400 mb-2" />
+                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                        {tool.label}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </article>
       </div>
     );
@@ -98,9 +119,6 @@ const DepartmentsView: React.FC = () => {
           <Building2 size={22} className="text-blue-600" />
           Departments
         </h1>
-        <p className="text-sm text-slate-500 mt-0.5">
-          Explore the ministries and departments of Christ Embassy Achievers PCF
-        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -134,7 +152,7 @@ const DepartmentsView: React.FC = () => {
                   <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">
                     <Icon size={16} />
                   </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{dept.tagline}</p>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{dept.name}</p>
                 </div>
                 <ChevronRight size={16} className="text-slate-400 flex-shrink-0 group-hover:text-blue-600" />
               </div>

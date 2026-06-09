@@ -1,4 +1,49 @@
-import { format, differenceInDays, parseISO, addYears, isAfter, isBefore, startOfDay, startOfWeek, addWeeks, subWeeks, addDays } from 'date-fns';
+import { format, differenceInDays, parseISO, addYears, isAfter, isBefore, startOfDay, startOfWeek, addWeeks, subWeeks, addDays, getDaysInMonth } from 'date-fns';
+
+/** Year used when only month & day are collected (leap year so Feb 29 is valid). */
+export const BIRTHDAY_PLACEHOLDER_YEAR = 2000;
+
+export const BIRTHDAY_MONTHS = [
+  { value: 1, label: 'January' },
+  { value: 2, label: 'February' },
+  { value: 3, label: 'March' },
+  { value: 4, label: 'April' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'June' },
+  { value: 7, label: 'July' },
+  { value: 8, label: 'August' },
+  { value: 9, label: 'September' },
+  { value: 10, label: 'October' },
+  { value: 11, label: 'November' },
+  { value: 12, label: 'December' },
+] as const;
+
+export function getBirthMonthDay(dob: string): { month: number; day: number } {
+  const birth = parseISO(dob);
+  return { month: birth.getMonth() + 1, day: birth.getDate() };
+}
+
+export function daysInBirthMonth(month: number): number {
+  if (month < 1 || month > 12) return 31;
+  return getDaysInMonth(new Date(BIRTHDAY_PLACEHOLDER_YEAR, month - 1, 1));
+}
+
+export function toBirthdayStorage(month: number, day: number): string | null {
+  if (!month || !day) return null;
+  const date = new Date(BIRTHDAY_PLACEHOLDER_YEAR, month - 1, day);
+  if (date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+  const m = String(month).padStart(2, '0');
+  const d = String(day).padStart(2, '0');
+  return `${BIRTHDAY_PLACEHOLDER_YEAR}-${m}-${d}`;
+}
+
+export function isPlaceholderBirthYear(dob: string): boolean {
+  return parseISO(dob).getFullYear() === BIRTHDAY_PLACEHOLDER_YEAR;
+}
+
+export function formatBirthday(dob: string): string {
+  return formatDate(dob, 'MMM d');
+}
 
 export const formatDate = (date: string | Date, pattern = 'MMM d, yyyy'): string => {
   const d = typeof date === 'string' ? parseISO(date) : date;

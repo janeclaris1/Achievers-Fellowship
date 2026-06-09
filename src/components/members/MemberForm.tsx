@@ -1,9 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { Loader2, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { uploadMemberPhoto } from '../../lib/memberPhotos';
 import type { Member, CellGroup, Gender, MemberStatus } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+import {
+  BIRTHDAY_MONTHS,
+  daysInBirthMonth,
+  getBirthMonthDay,
+  toBirthdayStorage,
+} from '../../utils/dateUtils';
 
 interface MemberFormProps {
   member?: Member | null;
@@ -21,11 +27,14 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, cellGroups, onSave, onC
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>(member?.photo_url || '');
 
+  const initialBirth = member?.dob ? getBirthMonthDay(member.dob) : { month: 0, day: 0 };
+
   const [form, setForm] = useState({
     first_name: member?.first_name || '',
     last_name: member?.last_name || '',
     gender: (member?.gender || 'MALE') as Gender,
-    dob: member?.dob || '',
+    birth_month: initialBirth.month,
+    birth_day: initialBirth.day,
     phone: member?.phone || '',
     email: member?.email || '',
     job_title: member?.job_title || '',
@@ -38,6 +47,11 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, cellGroups, onSave, onC
   });
 
   const [photoRemoved, setPhotoRemoved] = useState(false);
+
+  const maxBirthDay = useMemo(
+    () => (form.birth_month ? daysInBirthMonth(form.birth_month) : 31),
+    [form.birth_month]
+  );
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,8 +71,17 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, cellGroups, onSave, onC
     setSaving(true);
     setSaveError(null);
 
+    const dob = toBirthdayStorage(form.birth_month, form.birth_day);
+    if (!dob) {
+      setSaveError('Please select a valid month and day of birth.');
+      setSaving(false);
+      return;
+    }
+
+    const { birth_month: _bm, birth_day: _bd, ...rest } = form;
     const basePayload = {
-      ...form,
+      ...rest,
+      dob,
       email: form.email || null,
       job_title: form.job_title || null,
       created_by: user?.id,
@@ -160,8 +183,40 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, cellGroups, onSave, onC
           </select>
         </div>
         <div className="min-w-0">
-          <label className="label">Date of Birth *</label>
-          <input type="date" className="input w-full" required {...f('dob')} />
+          <label className="label">Birthday (month & day) *</label>
+          <div className="grid grid-cols-2 gap-2">
+            <select
+              className="input w-full"
+              required
+              value={form.birth_month || ''}
+              onChange={(e) => {
+                const month = Number(e.target.value);
+                setForm((prev) => {
+                  const maxDay = month ? daysInBirthMonth(month) : 31;
+                  const day = prev.birth_day > maxDay ? maxDay : prev.birth_day;
+                  return { ...prev, birth_month: month, birth_day: day };
+                });
+              }}
+            >
+              <option value="">Month</option>
+              {BIRTHDAY_MONTHS.map((m) => (
+                <option key={m.value} value={m.value}>{m.label}</option>
+              ))}
+            </select>
+            <select
+              className="input w-full"
+              required
+              value={form.birth_day || ''}
+              onChange={(e) => setForm((prev) => ({ ...prev, birth_day: Number(e.target.value) }))}
+              disabled={!form.birth_month}
+            >
+              <option value="">Day</option>
+              {Array.from({ length: maxBirthDay }, (_, i) => i + 1).map((day) => (
+                <option key={day} value={day}>{day}</option>
+              ))}
+            </select>
+          </div>
+          <p className="text-xs text-slate-400 mt-1">Year is not required — only month and day are stored.</p>
         </div>
       </div>
 

@@ -1,12 +1,13 @@
 import * as XLSX from 'xlsx';
 import { supabase } from './supabase';
 import type { CellGroup, Gender, MemberStatus } from '../types';
+import { toBirthdayStorage } from '../utils/dateUtils';
 
 export const MEMBER_IMPORT_HEADERS = [
   'First Name',
   'Last Name',
   'Gender',
-  'Date of Birth',
+  'Birthday (Month & Day)',
   'Phone',
   'Email',
   'Job Title',
@@ -136,6 +137,44 @@ const parseExcelDate = (value: unknown): string | null => {
   return null;
 };
 
+/** Parse month/day only; full dates are accepted but the year is ignored. */
+const parseBirthdayValue = (value: unknown): string | null => {
+  if (value === null || value === undefined || value === '') return null;
+
+  if (typeof value === 'number' && XLSX.SSF?.parse_date_code) {
+    const parsed = XLSX.SSF.parse_date_code(value);
+    if (parsed?.m && parsed?.d) {
+      return toBirthdayStorage(parsed.m, parsed.d);
+    }
+  }
+
+  const text = String(value).trim();
+  if (!text) return null;
+
+  const monthDay = text.match(/^(\d{1,2})[/.-](\d{1,2})$/);
+  if (monthDay) {
+    return toBirthdayStorage(Number(monthDay[1]), Number(monthDay[2]));
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) {
+    const [, month, day] = text.slice(0, 10).match(/^\d{4}-(\d{2})-(\d{2})$/) || [];
+    if (month && day) return toBirthdayStorage(Number(month), Number(day));
+  }
+
+  const dmy = text.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$/);
+  if (dmy) {
+    const [, d, m] = dmy;
+    return toBirthdayStorage(Number(m), Number(d));
+  }
+
+  const parsedDate = new Date(text);
+  if (!Number.isNaN(parsedDate.getTime())) {
+    return toBirthdayStorage(parsedDate.getMonth() + 1, parsedDate.getDate());
+  }
+
+  return null;
+};
+
 const parseGender = (value: string): Gender | null => {
   const g = value.trim().toUpperCase();
   if (['MALE', 'M', 'MAN', 'BOY', 'BRO'].includes(g)) return 'MALE';
@@ -202,8 +241,8 @@ export function buildMemberImportPreview(
     const gender = mapped.gender ? parseGender(mapped.gender) : null;
     if (!gender) errors.push('Gender must be MALE or FEMALE');
 
-    const dob = mapped.dob ? parseExcelDate(mapped.dob) : null;
-    if (!dob) errors.push('Date of Birth is required (YYYY-MM-DD)');
+    const dob = mapped.dob ? parseBirthdayValue(mapped.dob) : null;
+    if (!dob) errors.push('Birthday is required (month & day, e.g. 05-15 or May 15)');
 
     const dateJoined = mapped.date_joined
       ? parseExcelDate(mapped.date_joined)
@@ -258,7 +297,7 @@ export function downloadMemberImportTemplate() {
     'First Name': 'John',
     'Last Name': 'Doe',
     Gender: 'MALE',
-    'Date of Birth': '1990-05-15',
+    'Birthday (Month & Day)': '05-15',
     Phone: '+2348012345678',
     Email: 'john@example.com',
     'Job Title': 'Engineer',

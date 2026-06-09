@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { MEMBER_WITH_CELL_GROUP_SELECT } from '../../lib/memberQueries';
 import type { Member, BirthdayLog } from '../../types';
 import { getMemberDisplayName, getPrefix } from '../../utils/memberUtils';
-import { daysUntilBirthday, formatDate, getAgeOnBirthday } from '../../utils/dateUtils';
+import { daysUntilBirthday, formatDate, getAgeOnBirthday, isPlaceholderBirthYear } from '../../utils/dateUtils';
 import BirthdayCountdown from '../../components/shared/BirthdayCountdown';
 import AIReportCard from '../../components/shared/AIReportCard';
 import { useAuth } from '../../context/AuthContext';
@@ -52,7 +52,9 @@ const BirthdayManagement: React.FC = () => {
 
     const { data: { session } } = await supabase.auth.getSession();
     const prefix = getPrefix(member.gender);
-    const age = getAgeOnBirthday(member.dob) + (member.daysUntil > 0 ? 1 : 0);
+    const age = isPlaceholderBirthYear(member.dob)
+      ? undefined
+      : getAgeOnBirthday(member.dob) + (member.daysUntil > 0 ? 1 : 0);
 
     try {
       const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-birthday-message`, {
@@ -65,7 +67,7 @@ const BirthdayManagement: React.FC = () => {
           prefix,
           firstName: member.first_name,
           lastName: member.last_name,
-          age,
+          ...(age !== undefined ? { age } : {}),
         }),
       });
       const result = await resp.json();

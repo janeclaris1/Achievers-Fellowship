@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Phone, Clock, MessageSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Phone, Clock, MessageSquare, PhoneCall, History, Inbox, ChevronRight } from 'lucide-react';
 import { channelLabel } from '../../lib/callCenter';
 import type { OutreachChannel } from '../../types';
 import StatCard from '../../components/shared/StatCard';
@@ -41,6 +42,48 @@ const CallCenterDashboard: React.FC = () => {
       <PortalWelcomeHeader subtitle="Member outreach and communication hub" />
 
       <WelfarePartnershipBanner />
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Link
+          to="/callcenter/outreach"
+          className="card p-4 hover:shadow-md transition-shadow group flex items-center gap-3"
+        >
+          <div className="w-10 h-10 rounded-[8px] bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <PhoneCall size={20} className="text-blue-600 dark:text-blue-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Member Outreach</p>
+            <p className="text-xs text-slate-500">Call, SMS & WhatsApp</p>
+          </div>
+          <ChevronRight size={16} className="text-slate-400 group-hover:text-blue-600" />
+        </Link>
+        <Link
+          to="/callcenter/history"
+          className="card p-4 hover:shadow-md transition-shadow group flex items-center gap-3"
+        >
+          <div className="w-10 h-10 rounded-[8px] bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
+            <History size={20} className="text-violet-600 dark:text-violet-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Activity Log</p>
+            <p className="text-xs text-slate-500">All outreach history</p>
+          </div>
+          <ChevronRight size={16} className="text-slate-400 group-hover:text-violet-600" />
+        </Link>
+        <Link
+          to="/callcenter/bulk-sms"
+          className="card p-4 hover:shadow-md transition-shadow group flex items-center gap-3"
+        >
+          <div className="w-10 h-10 rounded-[8px] bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+            <Inbox size={20} className="text-emerald-600 dark:text-emerald-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Bulk Messaging</p>
+            <p className="text-xs text-slate-500">SMS & WhatsApp blasts</p>
+          </div>
+          <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-600" />
+        </Link>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <StatCard label="Outreach Today" value={loading ? '—' : activitiesToday} icon={<Phone size={20} />} color="blue" />

@@ -230,7 +230,7 @@ const AppRoutes: React.FC = () => {
         <Route path="reflections" element={<ReflectionsView />} />
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
-        <Route path="bulk-sms" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Bulk SMS</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
+        <Route path="bulk-sms" element={<BulkMessagingView />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Call Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>
 
