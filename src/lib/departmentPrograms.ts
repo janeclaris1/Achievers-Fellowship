@@ -7,7 +7,11 @@ export interface RadioPreviousProgram {
   airedOn: string;
   summary: string;
   gradient: string;
+  thumbnailImage?: string;
+  mediaUrl?: string;
 }
+
+export const RADIO_PROGRAM_THUMBNAIL = '/departments/radio-program-thumbnail.jpg';
 
 /** Recent Radio Outreach broadcasts shown on the landing page. */
 export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [

@@ -4,9 +4,15 @@ import {
   ArrowLeft,
   CheckCircle2,
   Loader2,
+  Play,
   Radio,
+  X,
 } from 'lucide-react';
-import { RADIO_OUTREACH_PREVIOUS_PROGRAMS } from '../../lib/departmentPrograms';
+import {
+  RADIO_OUTREACH_PREVIOUS_PROGRAMS,
+  RADIO_PROGRAM_THUMBNAIL,
+  type RadioPreviousProgram,
+} from '../../lib/departmentPrograms';
 import { cn } from '../../utils/cn';
 
 interface RadioOutreachLandingProps {
@@ -74,6 +80,15 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
   const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [playingProgram, setPlayingProgram] = useState<RadioPreviousProgram | null>(null);
+
+  const handlePlay = (program: RadioPreviousProgram) => {
+    if (program.mediaUrl) {
+      window.open(program.mediaUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    setPlayingProgram(program);
+  };
 
   const handleSubscribe = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -202,25 +217,90 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {RADIO_OUTREACH_PREVIOUS_PROGRAMS.map((program, index) => (
             <article key={program.id} className="card overflow-hidden flex flex-col h-full">
-              <div className={cn('h-2 bg-gradient-to-r', program.gradient)} />
-              <div className="p-5 flex flex-col flex-1">
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <span className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-full bg-violet-100 dark:bg-violet-900/40 px-2 text-xs font-bold text-violet-700 dark:text-violet-300">
+              <div className="relative aspect-video overflow-hidden bg-slate-900 group">
+                <img
+                  src={program.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
+                  alt={`${program.title} — Achievers Radio studio hosts`}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-slate-900/10" />
+                <div className="absolute top-3 left-3">
+                  <span className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-full bg-white/90 px-2 text-xs font-bold text-violet-700">
                     {index + 1}
                   </span>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <button
+                    type="button"
+                    onClick={() => handlePlay(program)}
+                    className="inline-flex items-center gap-2 rounded-full bg-rose-600 hover:bg-rose-700 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"
+                  >
+                    <Play size={16} className="fill-current" />
+                    Play Now
+                  </button>
+                </div>
+              </div>
+              <div className={cn('h-1 bg-gradient-to-r', program.gradient)} />
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h3 className="text-base font-heading font-semibold text-slate-900 dark:text-slate-100">
+                    {program.title}
+                  </h3>
                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">
                     {program.airedOn}
                   </p>
                 </div>
-                <h3 className="text-base font-heading font-semibold text-slate-900 dark:text-slate-100">
-                  {program.title}
-                </h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 flex-1">{program.summary}</p>
+                <p className="text-sm text-slate-600 dark:text-slate-300 flex-1">{program.summary}</p>
               </div>
             </article>
           ))}
         </div>
       </section>
+
+      {playingProgram && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setPlayingProgram(null)}
+        >
+          <div
+            className="relative w-full max-w-lg rounded-[12px] bg-white dark:bg-slate-900 shadow-xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setPlayingProgram(null)}
+              className="absolute top-3 right-3 z-10 rounded-full bg-black/40 p-1.5 text-white hover:bg-black/60"
+              aria-label="Close"
+            >
+              <X size={16} />
+            </button>
+            <div className="relative aspect-video bg-slate-900">
+              <img
+                src={playingProgram.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/50 text-white px-6 text-center">
+                <Play size={40} className="mb-3 fill-current opacity-90" />
+                <p className="font-heading font-semibold">{playingProgram.title}</p>
+                <p className="mt-2 text-sm text-white/80">
+                  Broadcast replay will be available here soon.
+                </p>
+              </div>
+            </div>
+            <div className="p-5">
+              <p className="text-sm text-slate-600 dark:text-slate-300">{playingProgram.summary}</p>
+              <button
+                type="button"
+                onClick={() => setPlayingProgram(null)}
+                className="mt-4 w-full rounded-[8px] bg-rose-600 hover:bg-rose-700 px-4 py-2.5 text-sm font-semibold text-white"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
