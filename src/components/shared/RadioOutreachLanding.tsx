@@ -1,0 +1,284 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Radio,
+} from 'lucide-react';
+import { RADIO_OUTREACH_PROGRAM_HIGHLIGHTS } from '../../lib/departmentPrograms';
+import { getDepartment } from '../../lib/departments';
+import { CHURCH_NAME, CHURCH_SHORT_NAME } from '../../lib/branding';
+import { cn } from '../../utils/cn';
+
+interface RadioOutreachLandingProps {
+  basePath: string;
+}
+
+function SocialIcon({ children, label }: { children: React.ReactNode; label: string }) {
+  return (
+    <span className="text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 transition-colors" aria-hidden>
+      {children}
+      <span className="sr-only">{label}</span>
+    </span>
+  );
+}
+
+const socialLinks = [
+  {
+    label: 'Facebook',
+    href: 'https://facebook.com',
+    icon: (
+      <SocialIcon label="Facebook">
+        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-current" aria-hidden>
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+        </svg>
+      </SocialIcon>
+    ),
+  },
+  {
+    label: 'X',
+    href: 'https://x.com',
+    icon: (
+      <SocialIcon label="X">
+        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-current" aria-hidden>
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </SocialIcon>
+    ),
+  },
+  {
+    label: 'Instagram',
+    href: 'https://instagram.com',
+    icon: (
+      <SocialIcon label="Instagram">
+        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-current" aria-hidden>
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+        </svg>
+      </SocialIcon>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://linkedin.com',
+    icon: (
+      <SocialIcon label="LinkedIn">
+        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] fill-current" aria-hidden>
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.126 0 2.063 2.063 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg>
+      </SocialIcon>
+    ),
+  },
+];
+
+const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath }) => {
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError(null);
+
+    const trimmed = email.trim();
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setError('Enter a valid email address.');
+      return;
+    }
+
+    setSubmitting(true);
+    await new Promise((resolve) => window.setTimeout(resolve, 600));
+    setSubscribed(true);
+    setSubmitting(false);
+    setEmail('');
+  };
+
+  return (
+    <div className="fade-in -mx-4 lg:-mx-6">
+      <div className="px-4 lg:px-6 mb-4">
+        <Link
+          to={basePath}
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+        >
+          <ArrowLeft size={16} /> All departments
+        </Link>
+      </div>
+
+      <section className="overflow-hidden rounded-none lg:rounded-[12px] border-y lg:border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
+        <div className="grid lg:grid-cols-2 min-h-[520px] lg:min-h-[640px]">
+          <div className="relative min-h-[280px] lg:min-h-full bg-slate-900">
+            <img
+              src="/departments/radio-outreach-hero.png"
+              alt="Radio studio mixing console"
+              className="absolute inset-0 h-full w-full object-cover object-left"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-900/10 to-slate-900/30 lg:to-white/0 dark:to-slate-900/0" />
+            <div className="absolute bottom-6 left-6 right-6 lg:hidden">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur-sm">
+                <Radio size={14} />
+                Radio Outreach
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 lg:py-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400 mb-3">
+              {CHURCH_SHORT_NAME}
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-wide text-slate-900 dark:text-slate-100 leading-tight">
+              Community Radio Initiative
+            </h1>
+
+            <div className="mt-6 space-y-4 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+              <p>
+                Radio Outreach at {CHURCH_NAME} is a community media initiative dedicated to
+                elevating voices, sharing the gospel, and strengthening connection across our
+                fellowship and beyond.
+              </p>
+              <p>
+                Through broadcasts, artist spotlights, youth programs, and faith-centered
+                storytelling, we help our community discover inspiring messages and underrepresented
+                stories that point people to Christ.
+              </p>
+            </div>
+
+            <div className="mt-10">
+              <h2 className="text-base font-heading font-bold text-slate-900 dark:text-slate-100">
+                Get Community Updates
+              </h2>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                Sign up to receive updates on community stories, youth programs, artist
+                spotlights, and ministry media initiatives.
+              </p>
+
+              {subscribed ? (
+                <div className="mt-5 flex items-start gap-2 rounded-[8px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300">
+                  <CheckCircle2 size={18} className="flex-shrink-0 mt-0.5" />
+                  <span>Thank you. You&apos;re subscribed to Radio Outreach updates.</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="mt-5 space-y-2">
+                  <div className="flex flex-col sm:flex-row gap-0 sm:gap-0">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email here*"
+                      className="flex-1 rounded-[8px] sm:rounded-r-none border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
+                      required
+                    />
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="mt-2 sm:mt-0 rounded-[8px] sm:rounded-l-none bg-rose-600 hover:bg-rose-700 disabled:opacity-70 px-6 py-3 text-sm font-semibold text-white transition-colors inline-flex items-center justify-center gap-2"
+                    >
+                      {submitting ? <Loader2 size={16} className="animate-spin" /> : null}
+                      Subscribe
+                    </button>
+                  </div>
+                  {error ? <p className="text-xs text-rose-600">{error}</p> : null}
+                </form>
+              )}
+
+              <div className="mt-8 flex items-center gap-4">
+                {socialLinks.map(({ label, href, icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={label}
+                    className="inline-flex"
+                  >
+                    {icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-10 px-4 lg:px-6 pb-4">
+        <div className="mb-6">
+          <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-slate-100">
+            Ministry Programs & Highlights
+          </h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Explore other outreach arms connected to our fellowship media and partnership work.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {RADIO_OUTREACH_PROGRAM_HIGHLIGHTS.map((program) => {
+            const Icon = program.icon;
+            const department = getDepartment(program.id);
+            const programPath = department ? `${basePath}/${program.id}` : null;
+
+            const card = (
+              <article
+                className={cn(
+                  'card overflow-hidden h-full flex flex-col transition-shadow',
+                  programPath && 'hover:shadow-md group'
+                )}
+              >
+                {program.backgroundImage ? (
+                  <div className="relative h-36 overflow-hidden">
+                    <img
+                      src={program.backgroundImage}
+                      alt=""
+                      className={cn(
+                        'h-full w-full group-hover:scale-105 transition-transform duration-300',
+                        program.imageClass || 'object-cover object-center'
+                      )}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <p className="text-white font-heading font-semibold text-sm">{program.name}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={cn('h-28 bg-gradient-to-r p-4 flex items-end', program.gradient)}>
+                    <p className="text-white font-heading font-semibold text-sm">{program.name}</p>
+                  </div>
+                )}
+
+                <div className="p-5 flex flex-col flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      <Icon size={16} />
+                    </div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-violet-600 dark:text-violet-400">
+                      {program.tagline}
+                    </p>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 flex-1">{program.description}</p>
+                  {programPath ? (
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:gap-2 transition-all">
+                      View program
+                      <ArrowRight size={14} />
+                    </span>
+                  ) : null}
+                </div>
+              </article>
+            );
+
+            return programPath ? (
+              <Link key={program.id} to={programPath} className="block h-full">
+                {card}
+              </Link>
+            ) : (
+              <div key={program.id} className="h-full">
+                {card}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default RadioOutreachLanding;

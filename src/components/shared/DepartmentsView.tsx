@@ -4,6 +4,8 @@ import { ArrowLeft, Building2, ChevronRight, History, Inbox, PhoneCall } from 'l
 import { useAuth } from '../../context/AuthContext';
 import { DEPARTMENTS, getDepartment } from '../../lib/departments';
 import { canUseCallCenterTools, getDepartmentsBasePath } from '../../lib/portalNav';
+import RadioOutreachLanding from './RadioOutreachLanding';
+import PartnershipDepartmentLanding from './PartnershipDepartmentLanding';
 import { cn } from '../../utils/cn';
 import type { UserRole } from '../../types';
 
@@ -36,6 +38,14 @@ const DepartmentsView: React.FC = () => {
   }
 
   if (department) {
+    if (department.id === 'radio-outreach') {
+      return <RadioOutreachLanding basePath={basePath} />;
+    }
+
+    if (department.backgroundImage) {
+      return <PartnershipDepartmentLanding department={department} basePath={basePath} />;
+    }
+
     const Icon = department.icon;
     const showCallCenterTools = department.id === 'call-center' && canUseCallCenterTools(role);
 
