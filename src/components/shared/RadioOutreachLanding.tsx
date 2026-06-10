@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle2,
   Loader2,
   Radio,
 } from 'lucide-react';
-import { RADIO_OUTREACH_PROGRAM_HIGHLIGHTS } from '../../lib/departmentPrograms';
-import { getDepartment } from '../../lib/departments';
+import { RADIO_OUTREACH_PREVIOUS_PROGRAMS } from '../../lib/departmentPrograms';
 import { cn } from '../../utils/cn';
 
 interface RadioOutreachLandingProps {
@@ -194,77 +192,33 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
       <section className="mt-10 px-4 lg:px-6 pb-4">
         <div className="mb-6">
           <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-slate-100">
-            Ministry Programs & Highlights
+            Previous Program Highlights
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Explore other outreach arms connected to our fellowship media and partnership work.
+            Highlights from nine recent Radio Outreach broadcasts and live sessions.
           </p>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {RADIO_OUTREACH_PROGRAM_HIGHLIGHTS.map((program) => {
-            const Icon = program.icon;
-            const department = getDepartment(program.id);
-            const programPath = department ? `${basePath}/${program.id}` : null;
-
-            const card = (
-              <article
-                className={cn(
-                  'card overflow-hidden h-full flex flex-col transition-shadow',
-                  programPath && 'hover:shadow-md group'
-                )}
-              >
-                {program.backgroundImage ? (
-                  <div className="relative h-36 overflow-hidden">
-                    <img
-                      src={program.backgroundImage}
-                      alt=""
-                      className={cn(
-                        'h-full w-full group-hover:scale-105 transition-transform duration-300',
-                        program.imageClass || 'object-cover object-center'
-                      )}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <p className="text-white font-heading font-semibold text-sm">{program.name}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={cn('h-28 bg-gradient-to-r p-4 flex items-end', program.gradient)}>
-                    <p className="text-white font-heading font-semibold text-sm">{program.name}</p>
-                  </div>
-                )}
-
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                      <Icon size={16} />
-                    </div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-violet-600 dark:text-violet-400">
-                      {program.tagline}
-                    </p>
-                  </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 flex-1">{program.description}</p>
-                  {programPath ? (
-                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:gap-2 transition-all">
-                      View program
-                      <ArrowRight size={14} />
-                    </span>
-                  ) : null}
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {RADIO_OUTREACH_PREVIOUS_PROGRAMS.map((program, index) => (
+            <article key={program.id} className="card overflow-hidden flex flex-col h-full">
+              <div className={cn('h-2 bg-gradient-to-r', program.gradient)} />
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <span className="inline-flex h-7 min-w-[1.75rem] items-center justify-center rounded-full bg-violet-100 dark:bg-violet-900/40 px-2 text-xs font-bold text-violet-700 dark:text-violet-300">
+                    {index + 1}
+                  </span>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    {program.airedOn}
+                  </p>
                 </div>
-              </article>
-            );
-
-            return programPath ? (
-              <Link key={program.id} to={programPath} className="block h-full">
-                {card}
-              </Link>
-            ) : (
-              <div key={program.id} className="h-full">
-                {card}
+                <h3 className="text-base font-heading font-semibold text-slate-900 dark:text-slate-100">
+                  {program.title}
+                </h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 flex-1">{program.summary}</p>
               </div>
-            );
-          })}
+            </article>
+          ))}
         </div>
       </section>
     </div>
