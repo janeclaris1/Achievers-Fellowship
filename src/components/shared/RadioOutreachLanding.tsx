@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import { RADIO_OUTREACH_PROGRAM_HIGHLIGHTS } from '../../lib/departmentPrograms';
 import { getDepartment } from '../../lib/departments';
-import { CHURCH_NAME, CHURCH_SHORT_NAME } from '../../lib/branding';
 import { cn } from '../../utils/cn';
 
 interface RadioOutreachLandingProps {
@@ -124,33 +123,24 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
           </div>
 
           <div className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 lg:py-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400 mb-3">
-              {CHURCH_SHORT_NAME}
-            </p>
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold uppercase tracking-wide text-slate-900 dark:text-slate-100 leading-tight">
-              Community Radio Initiative
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-slate-100 leading-tight">
+              Radio Outreach at Christ Embassy Achievers PCF
             </h1>
 
-            <div className="mt-6 space-y-4 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
+            <div className="mt-6 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
               <p>
-                Radio Outreach at {CHURCH_NAME} is a community media initiative dedicated to
-                elevating voices, sharing the gospel, and strengthening connection across our
-                fellowship and beyond.
-              </p>
-              <p>
-                Through broadcasts, artist spotlights, youth programs, and faith-centered
-                storytelling, we help our community discover inspiring messages and underrepresented
-                stories that point people to Christ.
+                The Radio Outreach at Christ Embassy Achievers PCF is a dedicated fellowship media
+                initiative. Our mission is to share the gospel of our Lord and Savior to the absolute
+                ends of the earth.
               </p>
             </div>
 
             <div className="mt-10">
               <h2 className="text-base font-heading font-bold text-slate-900 dark:text-slate-100">
-                Get Community Updates
+                Stay Connected with Our Community
               </h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                Sign up to receive updates on community stories, youth programs, artist
-                spotlights, and ministry media initiatives.
+                Sign up today to receive exclusive updates on our upcoming live events and broadcasts.
               </p>
 
               {subscribed ? (
