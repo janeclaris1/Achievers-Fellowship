@@ -220,7 +220,6 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
             <article key={program.id} className="card overflow-hidden flex flex-col h-full">
               <div className="relative aspect-video overflow-hidden bg-slate-900 group">
                 <RadioProgramThumbnail
-                  variant={program.thumbnailVariant}
                   imageSrc={program.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
                   alt={`${program.title} — Achievers Radio studio hosts`}
                   className="transition-transform duration-300 group-hover:scale-105"
@@ -278,7 +277,6 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
             </button>
             <div className="relative aspect-video bg-slate-900">
               <RadioProgramThumbnail
-                variant={playingProgram.thumbnailVariant}
                 imageSrc={playingProgram.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
                 alt={playingProgram.title}
               />
