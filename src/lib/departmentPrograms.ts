@@ -12,8 +12,7 @@ export interface RadioPreviousProgram {
 }
 
 export const RADIO_PROGRAM_THUMBNAIL = '/departments/radio-program-thumbnail.jpg';
-/** Composite studio thumbnail built from the real Achievers Radio host photos. */
-export const RADIO_HOSTS_STUDIO_THUMBNAIL = '/departments/radio-hosts-studio-thumbnail.jpg';
+export const RADIO_STUDIO_THUMBNAIL = '/departments/radio-studio-thumbnail.png';
 
 /** Recent Radio Outreach broadcasts shown on the landing page. */
 export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
@@ -23,7 +22,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'January 2026',
     summary: 'An evening of worship, testimony, and the preaching of the gospel to listeners across the fellowship.',
     gradient: 'from-violet-600 via-purple-600 to-fuchsia-700',
-    thumbnailImage: RADIO_HOSTS_STUDIO_THUMBNAIL,
+    thumbnailImage: RADIO_STUDIO_THUMBNAIL,
   },
   {
     id: 'youth-voice-broadcast',
@@ -38,7 +37,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'November 2025',
     summary: 'A blended broadcast of praise, prayer, and teaching on living victoriously through the Word of God.',
     gradient: 'from-blue-700 via-indigo-600 to-violet-700',
-    thumbnailImage: RADIO_HOSTS_STUDIO_THUMBNAIL,
+    thumbnailImage: RADIO_STUDIO_THUMBNAIL,
   },
   {
     id: 'healing-streams-special',
@@ -53,7 +52,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'September 2025',
     summary: 'Listeners were equipped to partner in spreading Rhapsody of Realities and reaching souls with literature.',
     gradient: 'from-amber-600 via-orange-600 to-rose-700',
-    thumbnailImage: RADIO_HOSTS_STUDIO_THUMBNAIL,
+    thumbnailImage: RADIO_STUDIO_THUMBNAIL,
   },
   {
     id: 'senior-cell-spotlight',
@@ -68,7 +67,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'July 2025',
     summary: 'A missions-focused session calling the church to take the gospel to the absolute ends of the earth.',
     gradient: 'from-slate-700 via-slate-600 to-blue-800',
-    thumbnailImage: RADIO_HOSTS_STUDIO_THUMBNAIL,
+    thumbnailImage: RADIO_STUDIO_THUMBNAIL,
   },
   {
     id: 'faith-talk-friday',
@@ -83,7 +82,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'April 2025',
     summary: 'A Resurrection Day broadcast celebrating Christ’s victory with worship, drama, and the Easter message.',
     gradient: 'from-rose-700 via-red-600 to-orange-600',
-    thumbnailImage: RADIO_HOSTS_STUDIO_THUMBNAIL,
+    thumbnailImage: RADIO_STUDIO_THUMBNAIL,
   },
 ];
 
