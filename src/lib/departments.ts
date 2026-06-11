@@ -6,7 +6,7 @@ import {
   HeartPulse,
   Monitor,
   PhoneCall,
-  Radio,
+  Podcast,
   type LucideIcon,
 } from 'lucide-react';
 import type { UserRole } from '../types';
@@ -58,10 +58,10 @@ export const DEPARTMENTS: Department[] = [
     overlayClass: 'bg-gradient-to-r from-slate-900/80 via-slate-900/50 to-slate-900/30',
   },
   {
-    id: 'radio-outreach',
-    name: 'Radio Outreach',
+    id: 'podcast',
+    name: 'Podcast',
     gradient: 'from-violet-600 via-purple-600 to-fuchsia-700',
-    icon: Radio,
+    icon: Podcast,
   },
   {
     id: 'welfare-department',

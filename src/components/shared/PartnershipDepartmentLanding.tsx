@@ -32,10 +32,10 @@ const PartnershipDepartmentLanding: React.FC<PartnershipDepartmentLandingProps> 
         </Link>
         <span className="text-slate-300 dark:text-slate-600">|</span>
         <Link
-          to={`${basePath}/radio-outreach`}
+          to={`${basePath}/podcast`}
           className="inline-flex items-center gap-1.5 text-sm text-violet-600 hover:text-violet-700 dark:text-violet-400"
         >
-          Radio Outreach
+          Podcast
         </Link>
       </div>
 

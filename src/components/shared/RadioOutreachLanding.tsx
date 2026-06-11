@@ -5,7 +5,7 @@ import {
   CheckCircle2,
   Loader2,
   Play,
-  Radio,
+  Podcast,
   X,
 } from 'lucide-react';
 import {
@@ -130,20 +130,20 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-slate-900/10 to-slate-900/30 lg:to-white/0 dark:to-slate-900/0" />
             <div className="absolute bottom-6 left-6 right-6 lg:hidden">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur-sm">
-                <Radio size={14} />
-                Radio Outreach
+                <Podcast size={14} />
+                Podcast
               </div>
             </div>
           </div>
 
           <div className="flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 lg:py-14">
             <h1 className="text-2xl sm:text-3xl font-heading font-bold text-slate-900 dark:text-slate-100 leading-tight">
-              Radio Outreach at Christ Embassy Achievers PCF
+              PODCAST at Christ Embassy Achievers PCF
             </h1>
 
             <div className="mt-6 text-sm sm:text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
               <p>
-                The Radio Outreach at Christ Embassy Achievers PCF is a dedicated fellowship media
+                The PODCAST at Christ Embassy Achievers PCF is a dedicated fellowship media
                 initiative. Our mission is to share the gospel of our Lord and Savior to the absolute
                 ends of the earth.
               </p>
@@ -154,13 +154,13 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
                 Stay Connected with Our Community
               </h2>
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                Sign up today to receive exclusive updates on our upcoming live events and broadcasts.
+                Sign up today to receive exclusive updates on our upcoming podcast episodes and live sessions.
               </p>
 
               {subscribed ? (
                 <div className="mt-5 flex items-start gap-2 rounded-[8px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300">
                   <CheckCircle2 size={18} className="flex-shrink-0 mt-0.5" />
-                  <span>Thank you. You&apos;re subscribed to Radio Outreach updates.</span>
+                  <span>Thank you. You&apos;re subscribed to PODCAST updates.</span>
                 </div>
               ) : (
                 <form onSubmit={handleSubscribe} className="mt-5 space-y-2">
@@ -211,7 +211,7 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
             Previous Program Highlights
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Highlights from nine recent Radio Outreach broadcasts and live sessions.
+            Highlights from nine recent PODCAST episodes and live sessions.
           </p>
         </div>
 
@@ -221,7 +221,7 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
               <div className="relative aspect-video overflow-hidden bg-slate-900 group">
                 <RadioProgramThumbnail
                   imageSrc={program.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
-                  alt={`${program.title} — Achievers Radio studio hosts`}
+                  alt={`${program.title} — Achievers Podcast`}
                   className="transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-slate-900/10" />

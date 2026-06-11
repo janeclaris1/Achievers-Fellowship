@@ -38,7 +38,7 @@ const DepartmentsView: React.FC = () => {
   }
 
   if (department) {
-    if (department.id === 'radio-outreach') {
+    if (department.id === 'podcast') {
       return <RadioOutreachLanding basePath={basePath} />;
     }
 

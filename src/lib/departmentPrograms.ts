@@ -14,7 +14,7 @@ export interface RadioPreviousProgram {
 export const RADIO_PROGRAM_THUMBNAIL = '/departments/radio-program-thumbnail.jpg';
 export const RADIO_STUDIO_THUMBNAIL = '/departments/radio-studio-thumbnail.png';
 
-/** Recent Radio Outreach broadcasts shown on the landing page. */
+/** Recent PODCAST episodes shown on the landing page. */
 export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
   {
     id: 'gospel-hour-live',
@@ -97,7 +97,7 @@ export interface DepartmentProgramHighlight {
   imageClass?: string;
 }
 
-/** Ministry programs featured on the Radio Outreach landing page. */
+/** Ministry programs featured on the PODCAST landing page. */
 export const RADIO_OUTREACH_PROGRAM_HIGHLIGHTS: DepartmentProgramHighlight[] = [
   {
     id: 'rhapsody-of-realities',
