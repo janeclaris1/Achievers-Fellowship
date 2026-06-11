@@ -13,6 +13,7 @@ import {
   RADIO_PROGRAM_THUMBNAIL,
   type RadioPreviousProgram,
 } from '../../lib/departmentPrograms';
+import RadioProgramThumbnail from './RadioProgramThumbnail';
 import { cn } from '../../utils/cn';
 
 interface RadioOutreachLandingProps {
@@ -218,10 +219,11 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
           {RADIO_OUTREACH_PREVIOUS_PROGRAMS.map((program, index) => (
             <article key={program.id} className="card overflow-hidden flex flex-col h-full">
               <div className="relative aspect-video overflow-hidden bg-slate-900 group">
-                <img
-                  src={program.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
+                <RadioProgramThumbnail
+                  variant={program.thumbnailVariant}
+                  imageSrc={program.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
                   alt={`${program.title} — Achievers Radio studio hosts`}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  className="transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-slate-900/10" />
                 <div className="absolute top-3 left-3">
@@ -275,10 +277,10 @@ const RadioOutreachLanding: React.FC<RadioOutreachLandingProps> = ({ basePath })
               <X size={16} />
             </button>
             <div className="relative aspect-video bg-slate-900">
-              <img
-                src={playingProgram.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
-                alt=""
-                className="h-full w-full object-cover"
+              <RadioProgramThumbnail
+                variant={playingProgram.thumbnailVariant}
+                imageSrc={playingProgram.thumbnailImage ?? RADIO_PROGRAM_THUMBNAIL}
+                alt={playingProgram.title}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/50 text-white px-6 text-center">
                 <Play size={40} className="mb-3 fill-current opacity-90" />

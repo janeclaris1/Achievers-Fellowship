@@ -1,6 +1,8 @@
 import type { LucideIcon } from 'lucide-react';
 import { BookMarked, BookOpen, HeartHandshake, HeartPulse, Newspaper } from 'lucide-react';
 
+export type RadioProgramThumbnailVariant = 'default' | 'studio-hosts';
+
 export interface RadioPreviousProgram {
   id: string;
   title: string;
@@ -8,6 +10,7 @@ export interface RadioPreviousProgram {
   summary: string;
   gradient: string;
   thumbnailImage?: string;
+  thumbnailVariant?: RadioProgramThumbnailVariant;
   mediaUrl?: string;
 }
 
@@ -21,6 +24,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'January 2026',
     summary: 'An evening of worship, testimony, and the preaching of the gospel to listeners across the fellowship.',
     gradient: 'from-violet-600 via-purple-600 to-fuchsia-700',
+    thumbnailVariant: 'studio-hosts',
   },
   {
     id: 'youth-voice-broadcast',
@@ -35,6 +39,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'November 2025',
     summary: 'A blended broadcast of praise, prayer, and teaching on living victoriously through the Word of God.',
     gradient: 'from-blue-700 via-indigo-600 to-violet-700',
+    thumbnailVariant: 'studio-hosts',
   },
   {
     id: 'healing-streams-special',
@@ -49,6 +54,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'September 2025',
     summary: 'Listeners were equipped to partner in spreading Rhapsody of Realities and reaching souls with literature.',
     gradient: 'from-amber-600 via-orange-600 to-rose-700',
+    thumbnailVariant: 'studio-hosts',
   },
   {
     id: 'senior-cell-spotlight',
@@ -63,6 +69,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'July 2025',
     summary: 'A missions-focused session calling the church to take the gospel to the absolute ends of the earth.',
     gradient: 'from-slate-700 via-slate-600 to-blue-800',
+    thumbnailVariant: 'studio-hosts',
   },
   {
     id: 'faith-talk-friday',
@@ -77,6 +84,7 @@ export const RADIO_OUTREACH_PREVIOUS_PROGRAMS: RadioPreviousProgram[] = [
     airedOn: 'April 2025',
     summary: 'A Resurrection Day broadcast celebrating Christ’s victory with worship, drama, and the Easter message.',
     gradient: 'from-rose-700 via-red-600 to-orange-600',
+    thumbnailVariant: 'studio-hosts',
   },
 ];
 
