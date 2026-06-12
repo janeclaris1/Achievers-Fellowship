@@ -130,7 +130,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="space-y-6 fade-in">
       <PortalWelcomeHeader
-        subtitle={`System overview — ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`}
+        subtitle={new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
       />
 
       <WelfarePartnershipBanner />

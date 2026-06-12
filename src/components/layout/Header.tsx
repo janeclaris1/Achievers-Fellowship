@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, LogOut, Menu } from 'lucide-react';
+import { Moon, Sun, LogOut, Menu, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import NotificationBell from '../shared/NotificationBell';
@@ -25,9 +25,15 @@ const roleColors: Record<string, string> = {
 
 interface HeaderProps {
   onMenuClick?: () => void;
+  sidebarCollapsed?: boolean;
+  onToggleSidebarCollapse?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+const Header: React.FC<HeaderProps> = ({
+  onMenuClick,
+  sidebarCollapsed = false,
+  onToggleSidebarCollapse,
+}) => {
   const { theme, toggleTheme } = useTheme();
   const { profile, signOut } = useAuth();
 
@@ -38,8 +44,19 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       <button
         onClick={onMenuClick}
         className="p-2 rounded-[8px] lg:hidden text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
+        aria-label="Open menu"
       >
         <Menu size={20} />
+      </button>
+
+      <button
+        type="button"
+        onClick={onToggleSidebarCollapse}
+        className="hidden p-2 rounded-[8px] text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 lg:inline-flex"
+        title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {sidebarCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
       </button>
 
       <div className="flex items-center gap-3 flex-1">

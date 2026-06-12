@@ -8,6 +8,7 @@ export type VisitStatus = 'SCHEDULED' | 'COMPLETED' | 'MISSED' | 'CANCELLED';
 export type ProgramType = 'BIRTHDAY' | 'BEREAVEMENT' | 'HOSPITAL_VISIT' | 'WEDDING' | 'SPECIAL_PROGRAM' | 'OTHER';
 export type ProgramStatus = 'PLANNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
 export type ChurchEventStatus = 'UPCOMING' | 'COMPLETED' | 'CANCELLED';
+export type MeetingStatus = 'SCHEDULED' | 'LIVE' | 'ENDED' | 'CANCELLED';
 
 export interface Profile {
   id: string;
@@ -115,10 +116,21 @@ export interface WelfareProgram {
   budget?: number;
   status: ProgramStatus;
   report?: string;
+  cover_image_url?: string;
   created_by?: string;
   created_at: string;
   updated_at: string;
   profiles?: Profile;
+}
+
+export interface WelfareProgramImage {
+  id: string;
+  program_id: string;
+  image_url: string;
+  caption?: string;
+  sort_order: number;
+  uploaded_by?: string;
+  created_at: string;
 }
 
 export interface PrayerRequest {
@@ -232,6 +244,42 @@ export interface ChurchEvent {
   updated_at: string;
 }
 
+export interface ChurchMeeting {
+  id: string;
+  title: string;
+  description?: string;
+  scheduled_at: string;
+  share_slug: string;
+  status: MeetingStatus;
+  started_at?: string;
+  ended_at?: string;
+  created_by?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PublicChurchMeeting {
+  id: string;
+  title: string;
+  description?: string;
+  scheduled_at: string;
+  share_slug: string;
+  status: MeetingStatus;
+  started_at?: string;
+}
+
+export interface ChurchMeetingParticipant {
+  id: string;
+  meeting_id: string;
+  display_name: string;
+  profile_id?: string;
+  client_session?: string;
+  joined_at: string;
+  left_at?: string;
+  duration_seconds?: number;
+  created_at: string;
+}
+
 export type BulkMessageChannel = 'SMS' | 'WHATSAPP' | 'BOTH';
 
 export interface BulkMessageLog {
@@ -334,6 +382,53 @@ export interface WelfarePartnership {
   partner_note?: string;
   partnership_arm?: string;
   paid_at?: string;
+  subscription_id?: string;
   created_at: string;
   profiles?: Profile;
+}
+
+export type PartnershipSubscriptionStatus =
+  | 'PENDING_SETUP'
+  | 'ACTIVE'
+  | 'PAUSED'
+  | 'CANCELLED'
+  | 'FAILED';
+
+export type PartnershipGoalPeriod = 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+
+export interface PartnershipSubscription {
+  id: string;
+  profile_id: string;
+  daily_amount: number;
+  currency: string;
+  partnership_arm?: string;
+  status: PartnershipSubscriptionStatus;
+  payer_email: string;
+  setup_payment_reference?: string;
+  next_charge_at?: string;
+  last_charged_at?: string;
+  consecutive_failures: number;
+  goal_amount?: number;
+  goal_period?: PartnershipGoalPeriod;
+  goal_set_at?: string;
+  started_at?: string;
+  paused_at?: string;
+  cancelled_at?: string;
+  created_at: string;
+  updated_at: string;
+  profiles?: Profile;
+}
+
+export interface PartnershipSubscriptionCharge {
+  id: string;
+  subscription_id: string;
+  amount: number;
+  currency: string;
+  status: WelfarePartnershipStatus;
+  payment_reference: string;
+  paystack_reference?: string;
+  welfare_partnership_id?: string;
+  failure_reason?: string;
+  charged_at?: string;
+  created_at: string;
 }

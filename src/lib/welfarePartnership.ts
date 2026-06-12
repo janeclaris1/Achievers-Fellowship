@@ -1,7 +1,8 @@
 import { supabase } from './supabase';
+import { getAuthFunctionHeaders, getFunctionsBaseUrl, getPublicFunctionHeaders } from './supabaseFunctions';
 import type { UserRole } from '../types';
 
-const functionsUrl = import.meta.env.VITE_SUPABASE_URL;
+const functionsUrl = getFunctionsBaseUrl();
 
 export function canViewWelfarePartnershipAmounts(role: UserRole | null | undefined): boolean {
   return role === 'MASTER_ADMIN' || role === 'WELFARE';
@@ -12,17 +13,14 @@ export async function initiateWelfarePartnership(params: {
   partnership_arm?: string;
   partner_note?: string;
 }): Promise<{ authorization_url?: string; payment_reference?: string; error?: string }> {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session?.access_token) {
+  const headers = await getAuthFunctionHeaders();
+  if (!headers) {
     return { error: 'Please sign in to partner with the Welfare Department.' };
   }
 
-  const resp = await fetch(`${functionsUrl}/functions/v1/initiate-welfare-partnership`, {
+  const resp = await fetch(`${functionsUrl}/initiate-welfare-partnership`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
+    headers,
     body: JSON.stringify(params),
   });
 
@@ -38,9 +36,9 @@ export async function initiateWelfarePartnership(params: {
 }
 
 export async function verifyWelfarePartnership(reference: string) {
-  const resp = await fetch(`${functionsUrl}/functions/v1/verify-welfare-partnership`, {
+  const resp = await fetch(`${functionsUrl}/verify-welfare-partnership`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getPublicFunctionHeaders(),
     body: JSON.stringify({ reference }),
   });
 

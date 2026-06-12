@@ -24,8 +24,9 @@ const config: Config = {
         info: '#0EA5E9',
       },
       fontFamily: {
-        heading: ['Poppins', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        sans: ['"PT Serif"', 'Georgia', 'Times New Roman', 'serif'],
+        heading: ['"PT Serif"', 'Georgia', 'Times New Roman', 'serif'],
+        body: ['"PT Serif"', 'Georgia', 'Times New Roman', 'serif'],
       },
       borderRadius: {
         card: '12px',

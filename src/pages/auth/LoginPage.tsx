@@ -142,7 +142,7 @@ const LoginPage: React.FC = () => {
               href="/forgot-password"
               className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
             >
-              Request new password from admin
+              Request new password
             </a>
           </div>
         </div>

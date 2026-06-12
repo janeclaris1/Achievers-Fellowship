@@ -23,6 +23,8 @@ import Reports from './pages/admin/Reports';
 import SoulWinners from './pages/admin/SoulWinners';
 import Partnerships from './pages/admin/Partnerships';
 import EventsPrograms from './pages/admin/EventsPrograms';
+import Meetings from './pages/admin/Meetings';
+import JoinMeeting from './pages/meeting/JoinMeeting';
 import EnvSetupScreen from './components/shared/EnvSetupScreen';
 import BulkMessagingView from './components/shared/BulkMessagingView';
 import ReflectionsView from './components/shared/ReflectionsView';
@@ -48,7 +50,10 @@ import CallCenterDashboard from './pages/callcenter/Dashboard';
 import MemberOutreach from './pages/callcenter/MemberOutreach';
 import CallHistory from './pages/callcenter/CallHistory';
 import PartnershipComplete from './pages/partnership/PartnershipComplete';
+import PartnershipSubscriptionComplete from './pages/partnership/PartnershipSubscriptionComplete';
+import PartnershipSubscriptionView from './pages/partnership/PartnershipSubscriptionView';
 import WelfarePartnerships from './pages/welfare/WelfarePartnerships';
+import PartnershipSubscriptions from './pages/admin/PartnershipSubscriptions';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -100,6 +105,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/partnership/complete" element={<PartnershipComplete />} />
+        <Route path="/partnership/subscription-complete" element={<PartnershipSubscriptionComplete />} />
+        <Route path="/join/:slug" element={<JoinMeeting />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
@@ -111,6 +118,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/partnership/complete" element={<PartnershipComplete />} />
+      <Route path="/partnership/subscription-complete" element={<PartnershipSubscriptionComplete />} />
+      <Route path="/join/:slug" element={<JoinMeeting />} />
 
       {/* Root redirect */}
       <Route
@@ -143,11 +152,14 @@ const AppRoutes: React.FC = () => {
         <Route path="soul-winners" element={<SoulWinners />} />
         <Route path="partnerships" element={<Partnerships />} />
         <Route path="events" element={<EventsPrograms />} />
+        <Route path="meetings" element={<Meetings />} />
         <Route path="bulk-messaging" element={<BulkMessagingView />} />
         <Route path="reflections" element={<ReflectionsView />} />
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
+        <Route path="partnership-subscriptions" element={<PartnershipSubscriptions />} />
+        <Route path="partnership-subscription" element={<PartnershipSubscriptionView />} />
       </Route>
       <Route
         path="/scl"
@@ -163,10 +175,12 @@ const AppRoutes: React.FC = () => {
         <Route path="birthdays" element={<BirthdayManagement />} />
         <Route path="followups" element={<FollowUpList />} />
         <Route path="events" element={<EventsPrograms />} />
+        <Route path="meetings" element={<Meetings />} />
         <Route path="reflections" element={<ReflectionsView />} />
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="notifications" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Notifications</h1><p className="text-slate-500 mt-2">Check your notification bell above.</p></div>} />
+        <Route path="partnership-subscription" element={<PartnershipSubscriptionView />} />
       </Route>
 
       {/* Welfare Portal */}
@@ -183,6 +197,7 @@ const AppRoutes: React.FC = () => {
         <Route path="birthdays" element={<BirthdayManagement />} />
         <Route path="programs" element={<Programs />} />
         <Route path="events" element={<EventsPrograms />} />
+        <Route path="meetings" element={<Meetings />} />
         <Route path="prayer-requests" element={<PrayerRequests />} />
         <Route path="calendar" element={<Visitations />} />
         <Route path="bulk-sms" element={<BulkMessagingView />} />
@@ -190,6 +205,8 @@ const AppRoutes: React.FC = () => {
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="welfare-partnerships" element={<WelfarePartnerships />} />
+        <Route path="partnership-subscriptions" element={<PartnershipSubscriptions />} />
+        <Route path="partnership-subscription" element={<PartnershipSubscriptionView />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Welfare Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
       </Route>
 
@@ -206,10 +223,12 @@ const AppRoutes: React.FC = () => {
         <Route path="list" element={<FollowUpList />} />
         <Route path="visitations" element={<Visitations />} />
         <Route path="events" element={<EventsPrograms />} />
+        <Route path="meetings" element={<Meetings />} />
         <Route path="reflections" element={<ReflectionsView />} />
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Follow-up Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
+        <Route path="partnership-subscription" element={<PartnershipSubscriptionView />} />
       </Route>
 
       {/* Call Center Portal */}
@@ -227,11 +246,13 @@ const AppRoutes: React.FC = () => {
         <Route path="sms" element={<MemberOutreach />} />
         <Route path="history" element={<CallHistory />} />
         <Route path="events" element={<EventsPrograms />} />
+        <Route path="meetings" element={<Meetings />} />
         <Route path="reflections" element={<ReflectionsView />} />
         <Route path="departments" element={<DepartmentsView />} />
         <Route path="departments/:departmentId" element={<DepartmentsView />} />
         <Route path="bulk-sms" element={<BulkMessagingView />} />
         <Route path="reports" element={<div className="p-4"><h1 className="text-xl font-heading font-bold">Call Reports</h1><p className="text-slate-500 mt-2">Coming soon</p></div>} />
+        <Route path="partnership-subscription" element={<PartnershipSubscriptionView />} />
       </Route>
 
       {/* 404 */}

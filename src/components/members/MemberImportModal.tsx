@@ -97,6 +97,7 @@ const MemberImportModal: React.FC<MemberImportModalProps> = ({
         <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 p-4 space-y-3">
           <p className="text-sm text-slate-600 dark:text-slate-300">
             Upload a CSV or Excel file to bulk-import members. Download the template first so your columns match.
+            For <strong>Cell Leader</strong> and <strong>Member</strong>, use <strong>Yes</strong> or <strong>No</strong>.
           </p>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={downloadMemberImportTemplate} className="btn-secondary text-sm flex items-center gap-2">

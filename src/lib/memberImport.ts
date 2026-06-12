@@ -16,7 +16,7 @@ export const MEMBER_IMPORT_HEADERS = [
   'Date Joined',
   'Senior Cell',
   'Cell Leader',
-  'Sub Cell Leader',
+  'Member',
 ] as const;
 
 const HEADER_ALIASES: Record<string, keyof ParsedMemberRow> = {
@@ -54,6 +54,7 @@ const HEADER_ALIASES: Record<string, keyof ParsedMemberRow> = {
   'cell leader': 'is_scl',
   scl: 'is_scl',
   is_sub_cl: 'is_sub_cl',
+  member: 'is_sub_cl',
   'sub cell leader': 'is_sub_cl',
   sub_cl: 'is_sub_cl',
 };
@@ -190,8 +191,11 @@ const parseStatus = (value: string): MemberStatus | null => {
   return null;
 };
 
+/** Leadership flags: use Yes or No in imports (Y/N also accepted). */
 const parseYesNo = (value: string): boolean => {
   const v = value.trim().toLowerCase();
+  if (!v) return false;
+  if (['n', 'no', 'false', '0'].includes(v)) return false;
   return ['y', 'yes', 'true', '1'].includes(v);
 };
 
@@ -305,8 +309,8 @@ export function downloadMemberImportTemplate() {
     Status: 'ACTIVE',
     'Date Joined': '2024-01-15',
     'Senior Cell': 'Senior Cell Name',
-    'Cell Leader': 'N',
-    'Sub Cell Leader': 'N',
+    'Cell Leader': 'No',
+    Member: 'No',
   };
   const worksheet = XLSX.utils.json_to_sheet([example], { header: [...MEMBER_IMPORT_HEADERS] });
   const workbook = XLSX.utils.book_new();

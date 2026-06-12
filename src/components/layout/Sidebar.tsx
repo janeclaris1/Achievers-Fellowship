@@ -4,8 +4,8 @@ import {
   LayoutDashboard, Users, UserCheck, Heart, Phone, Bell,
   Settings, FileText, Building2, ClipboardList, Calendar,
   BookOpen, MessageSquare, PhoneCall, BarChart3, ArrowRightLeft,
-  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart,
-  ChevronDown,
+  Shield, UserCog, Inbox, Activity, Trophy, HandCoins, CalendarDays, KeyRound, HandHeart, CalendarClock,
+  ChevronDown, Video,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUnreadReflectionCount } from '../../hooks/useUnreadReflectionCount';
@@ -31,9 +31,12 @@ const adminNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/admin/dashboard' },
   { label: 'Top Soul Winners', icon: <Trophy size={18} />, to: '/admin/soul-winners' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/admin/events' },
+  { label: 'Gatherings', icon: <Video size={18} />, to: '/admin/meetings' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/admin/reflections', showUnreadBadge: true },
   { label: 'Top Partners', icon: <HandCoins size={18} />, to: '/admin/partnerships' },
   { label: 'Welfare Sponsors', icon: <HandHeart size={18} />, to: '/admin/welfare-partnerships' },
+  { label: 'Daily Subscriptions', icon: <CalendarClock size={18} />, to: '/admin/partnership-subscriptions' },
+  { label: 'My Daily Partnership', icon: <CalendarClock size={18} />, to: '/admin/partnership-subscription' },
   { label: 'User Management', icon: <UserCog size={18} />, to: '/admin/users' },
   { label: 'Password Requests', icon: <KeyRound size={18} />, to: '/admin/password-requests' },
   { label: 'Senior Cells', icon: <Building2 size={18} />, to: '/admin/cell-groups' },
@@ -49,17 +52,20 @@ const adminNav: NavItem[] = [
 const sclNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/scl/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/scl/events' },
+  { label: 'Gatherings', icon: <Video size={18} />, to: '/scl/meetings' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/scl/reflections', showUnreadBadge: true },
   { label: 'My Members', icon: <Users size={18} />, to: '/scl/members' },
   { label: 'Attendance', icon: <UserCheck size={18} />, to: '/scl/attendance' },
   { label: 'Birthday Calendar', icon: <Calendar size={18} />, to: '/scl/birthdays' },
   { label: 'Follow-up View', icon: <ClipboardList size={18} />, to: '/scl/followups' },
   { label: 'Notifications', icon: <Bell size={18} />, to: '/scl/notifications' },
+  { label: 'Daily Partnership', icon: <CalendarClock size={18} />, to: '/scl/partnership-subscription' },
 ];
 
 const welfareNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/welfare/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/welfare/events' },
+  { label: 'Gatherings', icon: <Video size={18} />, to: '/welfare/meetings' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/welfare/reflections', showUnreadBadge: true },
   { label: 'Member Database', icon: <Users size={18} />, to: '/welfare/members' },
   { label: 'Birthdays', icon: <Heart size={18} />, to: '/welfare/birthdays' },
@@ -67,6 +73,8 @@ const welfareNav: NavItem[] = [
   { label: 'Calendar', icon: <Calendar size={18} />, to: '/welfare/calendar' },
   { label: 'Prayer Requests', icon: <BookOpen size={18} />, to: '/welfare/prayer-requests' },
   { label: 'Welfare Sponsors', icon: <HandHeart size={18} />, to: '/welfare/welfare-partnerships' },
+  { label: 'Daily Subscriptions', icon: <CalendarClock size={18} />, to: '/welfare/partnership-subscriptions' },
+  { label: 'My Daily Partnership', icon: <CalendarClock size={18} />, to: '/welfare/partnership-subscription' },
   { label: 'Bulk Messaging', icon: <MessageSquare size={18} />, to: '/welfare/bulk-sms' },
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/welfare/reports' },
 ];
@@ -74,20 +82,24 @@ const welfareNav: NavItem[] = [
 const followupNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/followup/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/followup/events' },
+  { label: 'Gatherings', icon: <Video size={18} />, to: '/followup/meetings' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/followup/reflections', showUnreadBadge: true },
   { label: 'Follow-up List', icon: <ClipboardList size={18} />, to: '/followup/list' },
   { label: 'Visitations', icon: <Calendar size={18} />, to: '/followup/visitations' },
   { label: 'Reports', icon: <FileText size={18} />, to: '/followup/reports' },
+  { label: 'Daily Partnership', icon: <CalendarClock size={18} />, to: '/followup/partnership-subscription' },
 ];
 
 const callCenterNav: NavItem[] = [
   { label: 'Dashboard', icon: <LayoutDashboard size={18} />, to: '/callcenter/dashboard' },
   { label: 'Events & Programs', icon: <CalendarDays size={18} />, to: '/callcenter/events' },
+  { label: 'Gatherings', icon: <Video size={18} />, to: '/callcenter/meetings' },
   { label: 'Reflections', icon: <BookOpen size={18} />, to: '/callcenter/reflections', showUnreadBadge: true },
   { label: 'Member Outreach', icon: <PhoneCall size={18} />, to: '/callcenter/outreach' },
   { label: 'Activity Log', icon: <Phone size={18} />, to: '/callcenter/history' },
   { label: 'Bulk SMS', icon: <Inbox size={18} />, to: '/callcenter/bulk-sms' },
   { label: 'Reports', icon: <BarChart3 size={18} />, to: '/callcenter/reports' },
+  { label: 'Daily Partnership', icon: <CalendarClock size={18} />, to: '/callcenter/partnership-subscription' },
 ];
 
 const navByPortal: Record<string, NavItem[]> = {
@@ -117,9 +129,10 @@ function resolveNavItems(role: UserRole, pathname: string): NavItem[] {
 interface SidebarProps {
   open?: boolean;
   onClose?: () => void;
+  collapsed?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose, collapsed = false }) => {
   const { profile } = useAuth();
   const location = useLocation();
   const unreadReflections = useUnreadReflectionCount();
@@ -143,9 +156,12 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
       to={item.to}
       onClick={onClose}
       end={!nested}
+      title={collapsed ? item.label : undefined}
       className={({ isActive }) =>
         cn(
           nested ? 'sidebar-link-nested' : 'sidebar-link',
+          collapsed && !nested && 'lg:justify-center lg:gap-0 lg:px-2',
+          collapsed && nested && 'lg:hidden',
           isActive && 'active'
         )
       }
@@ -158,7 +174,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
           </span>
         )}
       </span>
-      <span className="flex-1">{item.label}</span>
+      <span className={cn('flex-1', collapsed && 'lg:hidden')}>{item.label}</span>
     </NavLink>
   );
 
@@ -173,12 +189,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
 
       <aside
         className={cn(
-          'fixed left-0 top-16 bottom-0 w-60 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 z-40 flex flex-col transition-transform duration-200 overflow-y-auto',
+          'fixed left-0 top-16 bottom-0 w-60 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 z-40 flex flex-col transition-all duration-200 overflow-y-auto',
+          collapsed && 'lg:w-[72px]',
           'lg:translate-x-0 lg:static lg:top-0',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
-        <div className="px-4 pt-4 pb-2">
+        <div className={cn('px-4 pt-4 pb-2', collapsed && 'lg:hidden')}>
           <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
             {sectionTitle}
           </p>
@@ -194,54 +211,74 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
 
                 {showDepartmentsAfterDashboard && (
                   <div className="pt-0.5">
-                    <button
-                      type="button"
-                      onClick={() => setDepartmentsOpen((v) => !v)}
-                      className={cn(
-                        'sidebar-link w-full',
-                        onDepartmentsRoute && 'active'
-                      )}
-                    >
-                      <Building2 size={18} className="flex-shrink-0" />
-                      <span className="flex-1 text-left">Departments</span>
-                      <ChevronDown
-                        size={16}
-                        className={cn(
-                          'text-slate-400 transition-transform flex-shrink-0',
-                          departmentsOpen && 'rotate-180'
-                        )}
-                      />
-                    </button>
-
-                    {departmentsOpen && (
-                      <div className="ml-3 pl-2 border-l border-slate-200 dark:border-slate-700 space-y-0.5 mb-1">
-                        <NavLink
-                          to={departmentsBase}
-                          onClick={onClose}
-                          end
-                          className={({ isActive }) =>
-                            cn('sidebar-link-nested', isActive && 'active')
-                          }
+                    {collapsed ? (
+                      <NavLink
+                        to={departmentsBase}
+                        onClick={onClose}
+                        title="Departments"
+                        className={({ isActive }) =>
+                          cn(
+                            'sidebar-link lg:justify-center lg:gap-0 lg:px-2',
+                            onDepartmentsRoute && 'active',
+                            isActive && 'active'
+                          )
+                        }
+                      >
+                        <Building2 size={18} className="flex-shrink-0" />
+                        <span className="flex-1 lg:hidden">Departments</span>
+                      </NavLink>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setDepartmentsOpen((v) => !v)}
+                          className={cn(
+                            'sidebar-link w-full',
+                            onDepartmentsRoute && 'active'
+                          )}
                         >
-                          <span className="text-xs">Overview</span>
-                        </NavLink>
-                        {DEPARTMENTS.map((dept) => {
-                          const Icon = dept.icon;
-                          return (
+                          <Building2 size={18} className="flex-shrink-0" />
+                          <span className="flex-1 text-left">Departments</span>
+                          <ChevronDown
+                            size={16}
+                            className={cn(
+                              'text-slate-400 transition-transform flex-shrink-0',
+                              departmentsOpen && 'rotate-180'
+                            )}
+                          />
+                        </button>
+
+                        {departmentsOpen && (
+                          <div className="ml-3 pl-2 border-l border-slate-200 dark:border-slate-700 space-y-0.5 mb-1">
                             <NavLink
-                              key={dept.id}
-                              to={`${departmentsBase}/${dept.id}`}
+                              to={departmentsBase}
                               onClick={onClose}
+                              end
                               className={({ isActive }) =>
                                 cn('sidebar-link-nested', isActive && 'active')
                               }
                             >
-                              <Icon size={14} className="flex-shrink-0 opacity-70" />
-                              <span className="text-xs leading-snug">{dept.name}</span>
+                              <span className="text-xs">Overview</span>
                             </NavLink>
-                          );
-                        })}
-                      </div>
+                            {DEPARTMENTS.map((dept) => {
+                              const Icon = dept.icon;
+                              return (
+                                <NavLink
+                                  key={dept.id}
+                                  to={`${departmentsBase}/${dept.id}`}
+                                  onClick={onClose}
+                                  className={({ isActive }) =>
+                                    cn('sidebar-link-nested', isActive && 'active')
+                                  }
+                                >
+                                  <Icon size={14} className="flex-shrink-0 opacity-70" />
+                                  <span className="text-xs leading-snug">{dept.name}</span>
+                                </NavLink>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 )}
@@ -250,7 +287,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = true, onClose }) => {
           })}
         </nav>
 
-        <div className="px-4 py-4 border-t border-slate-100 dark:border-slate-700">
+        <div className={cn('px-4 py-4 border-t border-slate-100 dark:border-slate-700', collapsed && 'lg:hidden')}>
           <p className="text-[10px] text-slate-400">
             {CHURCH_NAME}
           </p>

@@ -60,3 +60,24 @@ verify_jwt = true
 
 [functions.send-email]
 verify_jwt = true
+
+[functions.create-partnership-subscription]
+verify_jwt = true
+
+[functions.verify-partnership-subscription]
+verify_jwt = false
+
+[functions.charge-partnership-subscriptions]
+verify_jwt = false
+
+[functions.manage-partnership-subscription]
+verify_jwt = true
+
+[functions.initiate-welfare-partnership]
+verify_jwt = true
+
+[functions.verify-welfare-partnership]
+verify_jwt = false
+
+[functions.paystack-webhook]
+verify_jwt = false

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, HandHeart, Loader2, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, HandHeart, Loader2 } from 'lucide-react';
 import {
   canViewWelfarePartnershipAmounts,
   initiateWelfarePartnership,
@@ -117,28 +117,23 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
         )}
 
         <div className="relative flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-xs font-medium uppercase tracking-wider text-white/80 flex items-center gap-1.5">
-              <Sparkles size={12} /> Welfare Department
-            </p>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => goToSlide(activeIndex - 1)}
-                className="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 transition-colors"
-                aria-label="Previous partnership"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={() => goToSlide(activeIndex + 1)}
-                className="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 transition-colors"
-                aria-label="Next partnership"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
+          <div className="flex items-center justify-end gap-1">
+            <button
+              type="button"
+              onClick={() => goToSlide(activeIndex - 1)}
+              className="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 transition-colors"
+              aria-label="Previous partnership"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => goToSlide(activeIndex + 1)}
+              className="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 transition-colors"
+              aria-label="Next partnership"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -147,10 +142,7 @@ const WelfarePartnershipBanner: React.FC<{ className?: string }> = ({ className 
                 <ArmIcon size={24} />
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-medium uppercase tracking-wider text-white/70">
-                  Partnership arm
-                </p>
-                <h2 className="text-lg sm:text-xl font-heading font-bold mt-0.5">
+                <h2 className="text-lg sm:text-xl font-heading font-bold">
                   {currentArm.name}
                 </h2>
                 <p className="text-sm text-white/90 mt-1 max-w-lg">

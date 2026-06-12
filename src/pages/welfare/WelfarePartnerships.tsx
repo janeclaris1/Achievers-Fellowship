@@ -7,6 +7,7 @@ import { formatDateTime } from '../../utils/dateUtils';
 import { formatGhs } from '../../utils/formatUtils';
 import { cn } from '../../utils/cn';
 import WelfarePartnershipBanner from '../../components/shared/WelfarePartnershipBanner';
+import PartnershipSubscriptionPromo from '../../components/shared/PartnershipSubscriptionPromo';
 
 const statusColors: Record<string, string> = {
   PENDING: 'bg-amber-100 text-amber-800',
@@ -43,6 +44,8 @@ const WelfarePartnerships: React.FC = () => {
       </div>
 
       <WelfarePartnershipBanner />
+
+      <PartnershipSubscriptionPromo />
 
       <div className="card p-4">
         <p className="text-sm text-slate-500">Total received (completed)</p>

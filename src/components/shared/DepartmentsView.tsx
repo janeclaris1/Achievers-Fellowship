@@ -6,6 +6,7 @@ import { DEPARTMENTS, getDepartment } from '../../lib/departments';
 import { canUseCallCenterTools, getDepartmentsBasePath } from '../../lib/portalNav';
 import RadioOutreachLanding from './RadioOutreachLanding';
 import PartnershipDepartmentLanding from './PartnershipDepartmentLanding';
+import WelfareDepartmentLanding from '../welfare/WelfareDepartmentLanding';
 import { cn } from '../../utils/cn';
 import type { UserRole } from '../../types';
 
@@ -40,6 +41,10 @@ const DepartmentsView: React.FC = () => {
   if (department) {
     if (department.id === 'podcast') {
       return <RadioOutreachLanding basePath={basePath} />;
+    }
+
+    if (department.id === 'welfare-department') {
+      return <WelfareDepartmentLanding department={department} basePath={basePath} />;
     }
 
     if (department.backgroundImage) {

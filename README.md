@@ -65,6 +65,8 @@ Set secrets in Supabase Dashboard → Edge Functions:
 ```
 SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
+PAYSTACK_SECRET_KEY
+APP_URL
 ANTHROPIC_API_KEY
 TWILIO_ACCOUNT_SID
 TWILIO_AUTH_TOKEN
@@ -72,6 +74,16 @@ TWILIO_PHONE_NUMBER
 TWILIO_WHATSAPP_NUMBER
 RESEND_API_KEY
 CHURCH_EMAIL
+```
+
+### Paystack partnerships
+
+See **[docs/PAYSTACK_SETUP.md](docs/PAYSTACK_SETUP.md)** for full Paystack deployment (one-time donations + daily subscriptions, webhook, cron).
+
+Quick deploy:
+
+```bash
+bash scripts/deploy-paystack.sh
 ```
 
 Deploy:
@@ -88,6 +100,13 @@ npx supabase functions deploy ai-bulk-message
 npx supabase functions deploy make-call
 npx supabase functions deploy send-email
 npx supabase functions deploy create-user
+npx supabase functions deploy create-partnership-subscription
+npx supabase functions deploy verify-partnership-subscription
+npx supabase functions deploy charge-partnership-subscriptions
+npx supabase functions deploy manage-partnership-subscription
+npx supabase functions deploy initiate-welfare-partnership
+npx supabase functions deploy verify-welfare-partnership
+npx supabase functions deploy paystack-webhook
 ```
 
 ### 5. Run locally

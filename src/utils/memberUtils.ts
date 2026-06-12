@@ -3,6 +3,33 @@ import type { Gender, Member, MemberStatus } from '../types';
 export const getPrefix = (gender: Gender): string =>
   gender === 'MALE' ? 'Bro' : 'Sis';
 
+/** Infer gender from a name that starts with Bro / Sis / Sister */
+export function inferGenderFromFullName(fullName: string): Gender | null {
+  const lower = fullName.trim().toLowerCase();
+  if (/^(sis|sister)\b/.test(lower)) return 'FEMALE';
+  if (/^bro\b/.test(lower)) return 'MALE';
+  return null;
+}
+
+export function getBroSisLabel(gender?: Gender | null, fullName?: string): 'Bro' | 'Sis' {
+  if (gender === 'FEMALE') return 'Sis';
+  if (gender === 'MALE') return 'Bro';
+  const inferred = fullName ? inferGenderFromFullName(fullName) : null;
+  if (inferred === 'FEMALE') return 'Sis';
+  if (inferred === 'MALE') return 'Bro';
+  return 'Bro';
+}
+
+export function getPartnershipFirstName(fullName?: string): string {
+  const trimmed = fullName?.trim() || 'Partner';
+  return trimmed.replace(/^(bro|sis|sister)\.?\s+/i, '').split(/\s+/)[0] || 'Partner';
+}
+
+/** e.g. "Esteem Bro John" or "Esteem Sis Mary" */
+export function getPartnershipEsteemGreeting(fullName?: string, gender?: Gender | null): string {
+  return `Esteem ${getBroSisLabel(gender, fullName)} ${getPartnershipFirstName(fullName)}`;
+}
+
 export const getMemberDisplayName = (member: Pick<Member, 'gender' | 'first_name' | 'last_name'>): string =>
   `${getPrefix(member.gender)} ${member.first_name} ${member.last_name}`;
 

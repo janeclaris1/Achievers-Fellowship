@@ -285,7 +285,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, cellGroups, onSave, onC
             onChange={e => setForm(f => ({ ...f, is_sub_cl: e.target.checked }))}
             className="rounded"
           />
-          <span className="text-sm text-slate-700 dark:text-slate-300">Cell Leader</span>
+          <span className="text-sm text-slate-700 dark:text-slate-300">Member</span>
         </label>
       </div>
 
